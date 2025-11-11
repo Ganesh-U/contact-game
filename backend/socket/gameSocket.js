@@ -225,7 +225,7 @@ export function initializeGameSocket(server, sessionMiddleware) {
             }
           }
 
-          const updatedGame = await Game.submitClue(
+          await Game.submitClue(
             gameId,
             roundNumber,
             clueWord,
@@ -290,12 +290,7 @@ export function initializeGameSocket(server, sessionMiddleware) {
           const room = await Room.findByRoomId(roomId);
           const player = room.players.find((p) => p.playerId === playerId);
 
-          const updatedGame = await Game.addContact(
-            gameId,
-            roundNumber,
-            playerId,
-            word
-          );
+          await Game.addContact(gameId, roundNumber, playerId, word);
 
           const logMessage = `${player.nickname} clicked CONTACT!`;
           await Game.addGameLogEntry(gameId, 'contact_clicked', logMessage);

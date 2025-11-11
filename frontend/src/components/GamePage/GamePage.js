@@ -468,7 +468,7 @@ function GamePage({ playerId }) {
 
       // Update room status back to waiting
       await fetch(
-        `${import.meta.env.VITE_API_URL}/api/rooms/${roomId}/status`,
+        `${process.env.REACT_APP_API_URL || 'http://localhost:5001'}/api/rooms/${roomId}/status`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
