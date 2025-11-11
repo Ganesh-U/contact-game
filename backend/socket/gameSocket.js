@@ -33,14 +33,76 @@ export function initializeGameSocket(server, sessionMiddleware) {
   io.on('connection', (socket) => {
     console.log(`✅ Socket connected: ${socket.id}`);
 
+    // Check if user has existing session
+    const session = socket.request.session;
+    if (session && session.playerId && session.roomId) {
+      console.log(
+        `Player ${session.playerId} reconnected with existing session`
+      );
+
+      // Restore player state from session
+      socket.playerId = session.playerId;
+      socket.roomId = session.roomId;
+      socket.nickname = session.nickname;
+
+      // Auto-rejoin room if it still exists
+      Room.findByRoomId(session.roomId)
+        .then((room) => {
+          if (room) {
+            socket.join(session.roomId);
+            playerSockets.set(session.playerId, socket.id);
+
+            // Cancel any pending disconnect timer
+            if (disconnectTimers.has(session.playerId)) {
+              clearTimeout(disconnectTimers.get(session.playerId));
+              disconnectTimers.delete(session.playerId);
+              console.log(
+                `Player ${session.playerId} reconnected - cancelled disconnect timer`
+              );
+            }
+
+            // Notify room of reconnection
+            io.to(session.roomId).emit('player_reconnected', {
+              playerId: session.playerId,
+              nickname: session.nickname,
+            });
+          } else {
+            // Room no longer exists, clear session
+            session.playerId = null;
+            session.roomId = null;
+            session.nickname = null;
+            session.save();
+          }
+        })
+        .catch((err) => {
+          console.error('Error checking room on reconnect:', err);
+        });
+    }
+
     // Join room
-    socket.on('join_room', async ({ roomId, playerId }) => {
+    socket.on('join_room', async ({ roomId, playerId, nickname }) => {
       try {
         socket.join(roomId);
 
         // Store player info in socket
         socket.playerId = playerId;
         socket.roomId = roomId;
+        socket.nickname = nickname;
+
+        // Store player info in session
+        const session = socket.request.session;
+        session.playerId = playerId;
+        session.roomId = roomId;
+        session.nickname = nickname;
+        session.save((err) => {
+          if (err) {
+            console.error('Error saving session:', err);
+          } else {
+            console.log(
+              `Session saved for player ${playerId} in room ${roomId}`
+            );
+          }
+        });
 
         // Track this player's connection
         playerSockets.set(playerId, socket.id);
@@ -59,7 +121,7 @@ export function initializeGameSocket(server, sessionMiddleware) {
           io.to(roomId).emit('room_updated', room);
         }
 
-        console.log(`Player ${playerId} joined room ${roomId}`);
+        console.log(`Player ${playerId} (${nickname}) joined room ${roomId}`);
       } catch (error) {
         console.error('Error joining room:', error);
         socket.emit('error', { message: 'Failed to join room' });
@@ -107,6 +169,21 @@ export function initializeGameSocket(server, sessionMiddleware) {
 
           await Room.removePlayer(roomId, playerToKick);
           const updatedRoom = await Room.findByRoomId(roomId);
+
+          // Clear kicked player's session
+          const allSockets = await io.fetchSockets();
+          for (const s of allSockets) {
+            if (s.playerId === playerToKick && s.roomId === roomId) {
+              const session = s.request.session;
+              if (session) {
+                session.playerId = null;
+                session.roomId = null;
+                session.nickname = null;
+                session.save();
+              }
+              break;
+            }
+          }
 
           // Notify the kicked player
           io.to(roomId).emit('player_kicked', {
@@ -510,6 +587,15 @@ export function initializeGameSocket(server, sessionMiddleware) {
     // Leave room
     socket.on('leave_room', async ({ roomId, playerId }) => {
       try {
+        // Clear session
+        const session = socket.request.session;
+        if (session) {
+          session.playerId = null;
+          session.roomId = null;
+          session.nickname = null;
+          session.save();
+        }
+
         const updatedRoom = await Room.removePlayer(roomId, playerId);
 
         if (updatedRoom && updatedRoom.players.length === 0) {
@@ -543,6 +629,19 @@ export function initializeGameSocket(server, sessionMiddleware) {
           console.log(
             `Player ${playerId} did not reconnect - handling disconnect`
           );
+
+          // Clear session if player didn't reconnect
+          const allSockets = await io.fetchSockets();
+          const isStillConnected = allSockets.some(
+            (s) => s.playerId === playerId
+          );
+
+          if (!isStillConnected) {
+            // Player is truly disconnected, but keep session for potential reconnect
+            console.log(
+              `Player ${playerId} session maintained for potential reconnect`
+            );
+          }
 
           const room = await Room.findByRoomId(roomId);
           if (!room) return;
