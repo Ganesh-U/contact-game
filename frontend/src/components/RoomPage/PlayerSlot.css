@@ -178,3 +178,50 @@
     font-size: 1.5rem;
   }
 }
+
+.kick-confirm {
+  margin-top: 0.5rem;
+  padding: 0.8rem;
+  background-color: var(--bg-primary);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.kick-confirm-text {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.kick-confirm-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.kick-confirm-yes,
+.kick-confirm-no {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.kick-confirm-yes {
+  background-color: var(--error);
+  color: white;
+}
+
+.kick-confirm-yes:hover {
+  background-color: #dc2626;
+}
+
+.kick-confirm-no {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.kick-confirm-no:hover {
+  background-color: var(--bg-secondary);
+}
