@@ -1,0 +1,88 @@
+.btn {
+  padding: 0.9rem 1.6rem; /* DEFAULT PADDING - THIS WAS MISSING! */
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: inherit;
+  outline: none;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: white;
+}
+
+.btn-primary:not(:disabled):hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+
+.btn-secondary:not(:disabled):hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-primary);
+}
+
+.btn-danger {
+  background-color: var(--error);
+  color: white;
+}
+
+.btn-danger:not(:disabled):hover {
+  background-color: #dc2626;
+}
+
+.btn-success {
+  background-color: var(--success);
+  color: white;
+}
+
+.btn-success:not(:disabled):hover {
+  background-color: #059669;
+}
+
+.btn-small {
+  padding: 0.6rem 1.1rem;
+  font-size: 0.95rem;
+}
+
+.btn-medium {
+  padding: 0.9rem 1.6rem;
+  font-size: 1rem;
+}
+
+.btn-large {
+  padding: 1.1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.btn-full-width {
+  width: 100%;
+}
