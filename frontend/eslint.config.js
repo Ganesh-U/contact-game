@@ -37,8 +37,6 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'error',
-
-      // Code quality rules
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'prefer-const': 'error',
       'no-var': 'error',
