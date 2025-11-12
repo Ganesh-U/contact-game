@@ -41,53 +41,43 @@ Email: pakkamsaravanan.v@northeastern.edu
 
 ### Home Page
 
-![Home Page](screenshots/home.png)
+![Home Page](images/homepage.png)
 _Landing page with game rules and room creation/joining options_
 
 ### Room Lobby
 
-![Room Lobby](screenshots/lobby.png)
+![Room Lobby](images/roompage.png)
 _Pre-game lobby where players select roles (Wordmaster or Guesser)_
 
 ### Active Gameplay - Wordmaster View
 
-![Wordmaster View](screenshots/wordmaster.png)
+![Wordmaster View](images/wordmaster.png)
 _Wordmaster interface showing secret word and clue-blocking controls_
 
 ### Active Gameplay - Clue Giver View
 
-![Clue Giver View](screenshots/clue-giver.png)
+![Clue Giver View](images/cluegiver.png)
 _Clue-giver interface for submitting clues about words starting with revealed letters_
 
 ### Active Gameplay - Guesser View
 
-![Guesser View](screenshots/guesser.png)
+![Guesser View](images/guesser.png)
 _Guesser interface for making contact guesses and attempting the secret word_
 
 ### Round Transition
 
-![Round Transition](screenshots/round-transition.png)
+![Round Transition](images/roundtransition.png)
 _Round end screen showing clue word reveal and contact results_
 
 ### Victory Screen
 
-![Victory Screen](screenshots/victory.png)
+![Victory Screen](images/victory.png)
 _Game completion screen celebrating the winner and revealing the secret word_
 
 ### Scoreboard
 
-![Scoreboard](screenshots/scoreboard.png)
+![Scoreboard](images/scoreboard.png)
 _Live scoreboard tracking points for all players throughout the game_
-
-### Game Log
-
-![Game Log](screenshots/game-log.png)
-_Real-time event log showing all game actions and outcomes_
-
-### Mobile Responsive
-
-![Mobile View](screenshots/mobile.png)
-_Optimized interface for mobile gameplay_
 
 ## Technology Requirements
 
