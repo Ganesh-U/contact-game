@@ -3,6 +3,8 @@ import { createServer } from 'http';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import roomsRouter from './routes/rooms.js';
 import gamesRouter from './routes/games.js';
@@ -10,27 +12,15 @@ import { initializeGameSocket } from './socket/gameSocket.js';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const server = createServer(app);
 
 const PORT = process.env.PORT || 5001;
 const MONGODB_URI =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/contact';
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
-
-// CORS Configuration - Allow frontend to access backend
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', CLIENT_URL);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
 
 // Middleware
 app.use(express.json());
@@ -54,7 +44,7 @@ const sessionMiddleware = session({
 
 app.use(sessionMiddleware);
 
-// Routes
+// API Routes - MUST come BEFORE static files
 app.use('/api/rooms', roomsRouter);
 app.use('/api/games', gamesRouter);
 
@@ -63,14 +53,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Contact Game API is running' });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
+// Serve static files from React build (production only)
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+  // React Router catch-all - send all non-API requests to React
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+  });
+}
 
 // Error handler
 app.use((err, req, res, _next) => {
-  console.error('Server error:', err);
   res.status(500).json({
     error: 'Internal server error',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined,
@@ -81,8 +75,6 @@ app.use((err, req, res, _next) => {
 async function startServer() {
   try {
     await connectDB();
-
-    // Initialize Socket.io
     initializeGameSocket(server, sessionMiddleware);
 
     server.listen(PORT, () => {
@@ -91,7 +83,6 @@ async function startServer() {
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
     process.exit(1);
   }
 }
