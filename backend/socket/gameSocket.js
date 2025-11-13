@@ -918,46 +918,63 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
 
     let newLetter = null;
     let contactSuccessful = false;
+    let contactSuccessReason = null;
 
-    // Successful contact conditions:
-    // 1. Time expired (wordmaster didn't block in time)
-    // 2. Contacts match
-    // 3. Wordmaster ran out of guesses without blocking
     const wordmasterBlocked = round.wordmasterGuesses.some((g) => g.correct);
+    const wordmasterOutOfGuesses = round.wordmasterGuessesRemaining <= 0;
+    const contactsMatched = contactResult.matched;
 
-    if (!wordmasterBlocked && contactResult.matched && timeExpired) {
+    // Fixed: treat matched contacts and exhausted wordmaster guesses as success
+    // conditions even if the timer has not expired yet. Previously we only
+    // marked success when timeExpired was true, which contradicted the rules
+    // and prevented points/letter reveals when guessers succeeded early.
+    if (!wordmasterBlocked && contactsMatched) {
       contactSuccessful = true;
-      // Successful contact - reveal next letter
+      contactSuccessReason = timeExpired
+        ? 'time_expired'
+        : wordmasterOutOfGuesses
+          ? 'guesses_exhausted'
+          : 'contacts_matched';
+
       newLetter = getNextRevealedLetter(game.targetWord, game.revealedLetters);
+
+      const contactPoints = getContactSuccessPoints();
+
+      // Award clue giver
+      await Game.updateScore(gameId, round.clueGiverId, contactPoints.clueGiver);
+
+      // Award matching guessers
+      for (const playerId of contactResult.matchedPlayers) {
+        if (playerId !== round.clueGiverId) {
+          await Game.updateScore(gameId, playerId, contactPoints.guesser);
+        }
+      }
 
       if (newLetter) {
         console.log('Revealing new letter:', newLetter);
-        // Award points
-        const contactPoints = getContactSuccessPoints();
-
-        // Award clue giver
-        await Game.updateScore(
-          gameId,
-          round.clueGiverId,
-          contactPoints.clueGiver
-        );
-
-        // Award matching guessers
-        for (const playerId of contactResult.matchedPlayers) {
-          if (playerId !== round.clueGiverId) {
-            await Game.updateScore(gameId, playerId, contactPoints.guesser);
-          }
-        }
-
-        const logMessage = `✅ Successful CONTACT! ${contactResult.matchedPlayers.length} player(s) guessed "${round.clueWord}" correctly. Next letter revealed: ${newLetter}`;
-        await Game.addGameLogEntry(gameId, 'contact_success', logMessage);
       }
+
+      const successReasonDescriptions = {
+        time_expired: 'Timer expired before the wordmaster blocked.',
+        guesses_exhausted: 'Wordmaster ran out of guesses.',
+        contacts_matched: 'Guessers matched the clue word immediately.',
+      };
+
+      const logMessage = `✅ Successful CONTACT! ${contactResult.matchedPlayers.length} player(s) guessed "${round.clueWord}" correctly${
+        newLetter
+          ? `. Next letter revealed: ${newLetter}.`
+          : '. No more letters left to reveal.'
+      } ${successReasonDescriptions[contactSuccessReason] || ''}`.trim();
+
+      await Game.addGameLogEntry(gameId, 'contact_success', logMessage);
     } else {
       const reason = wordmasterBlocked
         ? 'Wordmaster blocked successfully'
-        : contactResult.matched
-          ? 'Wordmaster blocked in time'
-          : 'Contact guesses did not match';
+        : wordmasterOutOfGuesses && !contactsMatched
+          ? 'Wordmaster ran out of guesses but contacts did not match'
+          : contactsMatched
+            ? 'Wordmaster blocked in time'
+            : 'Contact guesses did not match';
 
       const logMessage = `❌ Contact failed. ${reason}. Clue word was "${round.clueWord}".`;
       await Game.addGameLogEntry(gameId, 'contact_failed', logMessage);
