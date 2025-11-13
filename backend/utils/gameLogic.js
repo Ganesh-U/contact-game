@@ -34,12 +34,9 @@ export function getFirstToGuessBonus() {
 }
 
 export function checkContactMatch(contacts, clueWord) {
-  console.log('Checking contact match against clue word:', clueWord);
-  console.log('Contacts received:', contacts);
   console.log('Number of contacts:', contacts.length);
 
   if (contacts.length === 0) {
-    console.log('No contacts at all - FAIL');
     return { matched: false, matchedWord: null, matchedPlayers: [] };
   }
 
@@ -50,9 +47,6 @@ export function checkContactMatch(contacts, clueWord) {
 
   if (allMatch) {
     const matchedPlayers = contacts.map((c) => c.playerId);
-    console.log(
-      `✅ ALL ${contacts.length} contact(s) matched clue word "${clueWord}"!`
-    );
     return {
       matched: true,
       matchedWord: clueWord,
@@ -69,10 +63,6 @@ export function checkContactMatch(contacts, clueWord) {
     }
     wordGroups[word].push(contact.playerId);
   });
-
-  console.log('❌ Contacts did NOT all match:');
-  console.log('  Clue word:', clueWord);
-  console.log('  Guesses:', wordGroups);
 
   return {
     matched: false,

@@ -31,15 +31,9 @@ export function initializeGameSocket(server, sessionMiddleware) {
   const disconnectTimers = new Map(); // playerId -> timeout
 
   io.on('connection', (socket) => {
-    console.log(`✅ Socket connected: ${socket.id}`);
-
     // Check if user has existing session
     const session = socket.request.session;
     if (session && session.playerId && session.roomId) {
-      console.log(
-        `Player ${session.playerId} reconnected with existing session`
-      );
-
       // Restore player state from session
       socket.playerId = session.playerId;
       socket.roomId = session.roomId;
@@ -56,9 +50,6 @@ export function initializeGameSocket(server, sessionMiddleware) {
             if (disconnectTimers.has(session.playerId)) {
               clearTimeout(disconnectTimers.get(session.playerId));
               disconnectTimers.delete(session.playerId);
-              console.log(
-                `Player ${session.playerId} reconnected - cancelled disconnect timer`
-              );
             }
 
             // Notify room of reconnection
@@ -97,10 +88,6 @@ export function initializeGameSocket(server, sessionMiddleware) {
         session.save((err) => {
           if (err) {
             console.error('Error saving session:', err);
-          } else {
-            console.log(
-              `Session saved for player ${playerId} in room ${roomId}`
-            );
           }
         });
 
@@ -111,17 +98,12 @@ export function initializeGameSocket(server, sessionMiddleware) {
         if (disconnectTimers.has(playerId)) {
           clearTimeout(disconnectTimers.get(playerId));
           disconnectTimers.delete(playerId);
-          console.log(
-            `Player ${playerId} reconnected - cancelled disconnect timer`
-          );
         }
 
         const room = await Room.findByRoomId(roomId);
         if (room) {
           io.to(roomId).emit('room_updated', room);
         }
-
-        console.log(`Player ${playerId} (${nickname}) joined room ${roomId}`);
       } catch (error) {
         console.error('Error joining room:', error);
         socket.emit('error', { message: 'Failed to join room' });
@@ -247,16 +229,14 @@ export function initializeGameSocket(server, sessionMiddleware) {
             return;
           }
 
-          console.log('Validating word:', targetWord);
-            const wordExists = await Game.validateWord(targetWord);
-            console.log('Word validation result:', wordExists);
-            
-            if (!wordExists) {
-                        socket.emit('error', {
-                message: 'The entered word is not a valid English word in our dictionary.',
-              });
-              return;
-            }
+          const wordExists = await Game.validateWord(targetWord);
+          if (!wordExists) {
+            socket.emit('error', {
+              message:
+                'The entered word is not a valid English word in our dictionary.',
+            });
+            return;
+          }
 
           // Create game
           const game = await Game.create(
@@ -625,8 +605,6 @@ export function initializeGameSocket(server, sessionMiddleware) {
 
     // Disconnect
     socket.on('disconnect', async () => {
-      console.log(`❌ Socket disconnected: ${socket.id}`);
-
       const { playerId, roomId } = socket;
 
       if (!playerId || !roomId) return;
@@ -637,22 +615,9 @@ export function initializeGameSocket(server, sessionMiddleware) {
       // Set a grace period (5 seconds) before treating as permanent disconnect
       const disconnectTimer = setTimeout(async () => {
         try {
-          console.log(
-            `Player ${playerId} did not reconnect - handling disconnect`
-          );
-
           // Clear session if player didn't reconnect
           const allSockets = await io.fetchSockets();
-          const isStillConnected = allSockets.some(
-            (s) => s.playerId === playerId
-          );
-
-          if (!isStillConnected) {
-            // Player is truly disconnected, but keep session for potential reconnect
-            console.log(
-              `Player ${playerId} session maintained for potential reconnect`
-            );
-          }
+          allSockets.some((s) => s.playerId === playerId);
 
           const room = await Room.findByRoomId(roomId);
           if (!room) return;
@@ -745,10 +710,6 @@ async function handlePlayerDisconnectDuringGame(
     const isCurrentClueGiver =
       game.rounds.length > 0 &&
       game.rounds[game.rounds.length - 1]?.clueGiverId === playerId;
-
-    console.log(
-      `Player ${playerNickname} disconnected. Wordmaster: ${isWordmaster}, ClueGiver: ${isCurrentClueGiver}`
-    );
 
     // Check remaining connected players
     const remainingPlayers = room.players.filter(
@@ -1013,7 +974,6 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
     const roundEndMessage = `Round ${roundNumber} ended.`;
     await Game.addGameLogEntry(gameId, 'round_ended', roundEndMessage);
 
-    console.log('Emitting round_ended event');
     io.to(roomId).emit('round_ended', {
       game: updatedGame,
       roundNumber,

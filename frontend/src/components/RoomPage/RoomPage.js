@@ -70,7 +70,6 @@ function RoomPage({ playerId, nickname, setNickname }) {
   const loadRoom = async () => {
     // Safety check - don't load if no playerId
     if (!playerId) {
-      console.log('No playerId yet - waiting...');
       return;
     }
 
@@ -95,19 +94,16 @@ function RoomPage({ playerId, nickname, setNickname }) {
       });
 
       if (playerInRoom) {
-        console.log('Player already in room - no need to join');
         setRoom(roomData);
         setLoading(false);
         return;
       }
 
       if (!nickname) {
-        console.log('No nickname - showing modal');
         setRoom(roomData);
         setShowNicknameModal(true);
         setLoading(false);
       } else {
-        console.log('Has nickname - attempting auto-join');
         try {
           await api.addPlayer(roomId, playerId, nickname);
           const updatedRoom = await api.getRoom(roomId);
@@ -144,13 +140,9 @@ function RoomPage({ playerId, nickname, setNickname }) {
   };
 
   const handleRoomUpdate = (updatedRoom) => {
-    console.log('Room updated:', updatedRoom);
     setRoom(updatedRoom);
 
     if (updatedRoom.status === 'waiting') {
-      console.log(
-        'Room status is waiting - clearing wordmaster choosing overlay'
-      );
       setWordmasterChoosing(false);
       setChoosingWordmasterName('');
       setShowTargetWordModal(false);
@@ -162,14 +154,8 @@ function RoomPage({ playerId, nickname, setNickname }) {
     navigate(`/game/${roomId}`);
   };
 
-  const handlePlayerLeft = ({
-    playerId: leftPlayerId,
-    nickname: leftPlayerNick,
-  }) => {
-    console.log(`Player ${leftPlayerNick} (${leftPlayerId}) left the room`);
-
+  const handlePlayerLeft = ({ nickname: leftPlayerNick }) => {
     if (wordmasterChoosing && choosingWordmasterName === leftPlayerNick) {
-      console.log('Wordmaster who was choosing left - clearing overlay');
       setWordmasterChoosing(false);
       setChoosingWordmasterName('');
       setShowTargetWordModal(false);
@@ -205,11 +191,6 @@ function RoomPage({ playerId, nickname, setNickname }) {
   };
 
   const handleWordmasterChoosing = ({ wordmasterId, wordmasterNickname }) => {
-    console.log('Received wordmaster_choosing event:', {
-      wordmasterId,
-      wordmasterNickname,
-      currentPlayerId: playerId,
-    });
     if (wordmasterId !== playerId) {
       setChoosingWordmasterName(wordmasterNickname);
       setWordmasterChoosing(true);
@@ -217,7 +198,6 @@ function RoomPage({ playerId, nickname, setNickname }) {
   };
 
   const handleWordmasterDisconnectedDuringSetup = ({ wordmasterNickname }) => {
-    console.log('Wordmaster disconnected during setup:', wordmasterNickname);
     setWordmasterChoosing(false);
     setChoosingWordmasterName('');
     setShowTargetWordModal(false);
