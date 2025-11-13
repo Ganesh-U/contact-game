@@ -247,6 +247,17 @@ export function initializeGameSocket(server, sessionMiddleware) {
             return;
           }
 
+          console.log('Validating word:', targetWord);
+            const wordExists = await Game.validateWord(targetWord);
+            console.log('Word validation result:', wordExists);
+            
+            if (!wordExists) {
+                        socket.emit('error', {
+                message: 'The entered word is not a valid English word in our dictionary.',
+              });
+              return;
+            }
+
           // Create game
           const game = await Game.create(
             roomId,

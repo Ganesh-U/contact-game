@@ -346,4 +346,9 @@ export class Game {
     const result = await db.collection(COLLECTION_NAME).deleteOne({ gameId });
     return result.deletedCount > 0;
   }
+
+  static async validateWord(word) {
+    const db = getDB();
+    return await db.collection('words').findOne({ words: word.toLowerCase() });
+  }
 }
