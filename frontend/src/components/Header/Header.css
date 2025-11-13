@@ -94,10 +94,15 @@
   transform: scale(0.95);
 }
 
-.btn-secondary {
-  background-color: transparent;
+.header-actions .btn-secondary {
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   font-weight: 600;
