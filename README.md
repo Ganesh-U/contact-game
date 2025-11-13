@@ -331,16 +331,6 @@ Contact is a cooperative word-guessing game where Guessers work together to reve
 - Session persistence across page reloads
 - Player disconnect handling with 5-second grace period
 
-### Technical Implementation
-
-- React with Hooks (useState, useEffect, useRef)
-- MongoDB native driver with full CRUD operations
-- RESTful API with Express.js
-- Socket.io for real-time bidirectional communication
-- Session management with express-session and connect-mongo
-- PropTypes validation for all React components
-- Modular CSS with component-specific stylesheets
-
 ## Future Enhancements
 
 - Custom word lists and themed categories
