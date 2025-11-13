@@ -2,6 +2,9 @@ import { getDB } from '../config/db.js';
 
 const COLLECTION_NAME = 'games';
 
+// Fixed: normalize findOneAndUpdate responses so we only return the updated game document.
+const getUpdatedDocument = (result) => result?.value ?? null;
+
 export class Game {
   static generateGameId() {
     return `game_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -77,7 +80,7 @@ export class Game {
         { $set: updates },
         { returnDocument: 'after' }
       );
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async startNewRound(gameId, roundData) {
@@ -108,7 +111,7 @@ export class Game {
       { returnDocument: 'after' }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async submitClue(gameId, roundNumber, clueWord, clue, isSecondClue) {
@@ -132,7 +135,7 @@ export class Game {
         { returnDocument: 'after' }
       );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async addContact(gameId, roundNumber, playerId, word) {
@@ -151,7 +154,7 @@ export class Game {
       { returnDocument: 'after' }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async updateContact(gameId, roundNumber, playerId, word) {
@@ -187,7 +190,7 @@ export class Game {
       }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async removeContact(gameId, roundNumber, playerId) {
@@ -202,7 +205,7 @@ export class Game {
       { returnDocument: 'after' }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async addWordmasterGuess(gameId, roundNumber, guess, correct) {
@@ -222,7 +225,7 @@ export class Game {
       { returnDocument: 'after' }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async endRound(
@@ -256,7 +259,7 @@ export class Game {
         { returnDocument: 'after' }
       );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async recordTargetWordGuess(gameId, playerId, guess, correct) {
@@ -279,7 +282,7 @@ export class Game {
         { returnDocument: 'after' }
       );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async updateScore(gameId, playerId, pointsToAdd) {
@@ -292,7 +295,7 @@ export class Game {
         { returnDocument: 'after' }
       );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async addGameLogEntry(gameId, event, message, metadata = {}) {
@@ -312,7 +315,7 @@ export class Game {
       { returnDocument: 'after' }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async completeGame(gameId, winnerId) {
@@ -329,7 +332,7 @@ export class Game {
       { returnDocument: 'after' }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async getAllGames() {

@@ -2,6 +2,10 @@ import { getDB } from '../config/db.js';
 
 const COLLECTION_NAME = 'rooms';
 
+// Fixed: ensure we return the updated document from findOneAndUpdate so callers
+// receive the room data (not the driver response wrapper).
+const getUpdatedDocument = (result) => result?.value ?? null;
+
 export class Room {
   static generateRoomId() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -50,7 +54,7 @@ export class Room {
         { $set: { ...updates, updatedAt: new Date() } },
         { returnDocument: 'after' }
       );
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async addPlayer(roomId, playerId, nickname) {
@@ -86,7 +90,7 @@ export class Room {
       { returnDocument: 'after' }
     );
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async removePlayer(roomId, playerId) {
@@ -123,7 +127,7 @@ export class Room {
       .collection(COLLECTION_NAME)
       .findOneAndUpdate({ roomId }, updates, { returnDocument: 'after' });
 
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async updatePlayerRole(roomId, playerId, role) {
@@ -138,17 +142,16 @@ export class Room {
       },
       { returnDocument: 'after' }
     );
-    return result;
+    return getUpdatedDocument(result);
   }
 
   static async updateSettings(roomId, settings) {
-    const result = await this.updateRoom(roomId, {
+    return await this.updateRoom(roomId, {
       settings: {
         roundTime: settings.roundTime || 2,
         wordmasterGuesses: settings.wordmasterGuesses || 3,
       },
     });
-    return result;
   }
 
   static async updateStatus(roomId, status) {
