@@ -94,7 +94,7 @@ _Live scoreboard tracking points for all players throughout the game_
 
 - **ESLint:** JavaScript linting and code quality
 - **Prettier:** Code formatting and consistency
-- **Build Tool:** React Scripts 
+- **Build Tool:** React Scripts
 - **Git:** Version control with clear commit history
 
 ### Browser Support
@@ -119,12 +119,11 @@ _Live scoreboard tracking points for all players throughout the game_
 git clone https://github.com/YOUR_USERNAME/contact-game.git
 cd contact-game
 
-# Setup environment variables (Optional for local development)
-# Create backend/.env if you want to customize:
-MONGODB_URI=mongodb://localhost:27017/contact  # Default if not set
-SESSION_SECRET=your-secret-key-here            # Default: 'contact-game-secret-key'
-PORT=5001                                      # Default: 5001
-NODE_ENV=production                            # Default: 'development'
+# (Optional) Setup environment variables
+# Copy the example file and customize if needed
+cp backend/.env.example backend/.env
+# Edit backend/.env to customize MongoDB URI, port, or session secret
+# Note: The app works without .env using sensible defaults
 
 # Start MongoDB (if using Docker)
 docker run -d -p 27017:27017 --name mongodb mongo:latest
