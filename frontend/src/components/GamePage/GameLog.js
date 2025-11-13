@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './GameLog.css';
 
-function GameLog({ gameLog }) {
+function GameLog({ gameLog, playerNicknames }) {
   const logEndRef = useRef(null);
 
   useEffect(() => {
@@ -11,8 +11,8 @@ function GameLog({ gameLog }) {
   }, [gameLog]);
 
   const formatLogMessage = (logEntry) => {
-    // The message already has player nicknames from backend
-    return logEntry.message;
+    // Fixed: accept playerNicknames prop so we can safely format messages if needed
+    return logEntry.message || playerNicknames[logEntry.playerId] || '';
   };
 
   const getLogEntryClass = (event) => {
