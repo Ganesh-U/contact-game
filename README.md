@@ -116,41 +116,34 @@ _Live scoreboard tracking points for all players throughout the game_
 
 ```bash
 # Clone the repository
-git clone https://github.com/Ganesh-U/contact-game.git
+git clone https://github.com/YOUR_USERNAME/contact-game.git
 cd contact-game
-
-# Install backend dependencies
-cd backend
-npm install
-
-# Install frontend dependencies
-cd ../frontend
-npm install
 
 # Setup environment variables
 # Create backend/.env with:
 MONGODB_URI=mongodb://localhost:27017/contact
 SESSION_SECRET=your-secret-key-here
 PORT=5001
-NODE_ENV=development
+NODE_ENV=production
 
 # Start MongoDB (if using Docker)
 docker run -d -p 27017:27017 --name mongodb mongo:latest
 
 # Seed the database with sample data (creates 1000+ synthetic records)
+# (Optional, only needed once)
 cd backend
 npm run seed
 
-# Start backend server (from backend/)
-npm start
-# Backend runs on http://localhost:5001
+# Return to project root and build
+cd ..
+npm run build
+# This installs all dependencies (frontend + backend) and builds the React app
 
-# In a new terminal, start frontend (from frontend/)
-cd frontend
+# Start the server (serves both frontend and backend on single port)
 npm start
-# Frontend runs on http://localhost:3000
 
-# Open browser and navigate to http://localhost:3000
+# Open browser and navigate to http://localhost:5001
+# Everything runs on port 5001!
 ```
 
 ### Production Deployment (Single Service)
