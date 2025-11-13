@@ -119,65 +119,37 @@ _Live scoreboard tracking points for all players throughout the game_
 git clone https://github.com/YOUR_USERNAME/contact-game.git
 cd contact-game
 
-# Setup environment variables
-# Create backend/.env with:
-MONGODB_URI=mongodb://localhost:27017/contact
-SESSION_SECRET=your-secret-key-here
-PORT=5001
-NODE_ENV=production
+# Setup environment variables (Optional for local development)
+# Create backend/.env if you want to customize:
+MONGODB_URI=mongodb://localhost:27017/contact  # Default if not set
+SESSION_SECRET=your-secret-key-here            # Default: 'contact-game-secret-key'
+PORT=5001                                      # Default: 5001
+NODE_ENV=production                            # Default: 'development'
 
 # Start MongoDB (if using Docker)
 docker run -d -p 27017:27017 --name mongodb mongo:latest
+# Or use your local MongoDB installation
 
 # Seed the database with sample data (creates 1000+ synthetic records)
 # (Optional, only needed once)
 cd backend
 npm run seed
-
-# Return to project root and build
 cd ..
-npm run build
-# This installs all dependencies (frontend + backend) and builds the React app
 
-# Start the server (serves both frontend and backend on single port)
+# Build and install all dependencies
+npm run build
+# This installs backend dependencies, frontend dependencies, and builds the React app
+
+# Start the server (serves both frontend and backend)
 npm start
 
 # Open browser and navigate to http://localhost:5001
-# Everything runs on port 5001!
-```
 
-### Production Deployment (Single Service)
-
-```bash
-# From project root
-
-# Install all dependencies and build frontend
-npm run build
-
-# Start production server
-NODE_ENV=production npm start
-
-# Application runs on http://localhost:5001
-```
-
-### Development Commands
-
-```bash
-# Backend (from backend/)
-npm start              # Start backend server
-npm run lint           # Run ESLint
-npm run format         # Format with Prettier
-npm run seed           # Seed database
-
-# Frontend (from frontend/)
-npm start              # Start development server
-npm run build          # Build production bundle
-npm run lint           # Run ESLint
-npm run format         # Format with Prettier
-
-# Root (deployment)
-npm run build          # Build entire application
-npm start              # Start production server
+# Optional: Code quality and formatting
+cd frontend && npm run lint      # Check frontend code
+cd backend && npm run lint       # Check backend code
+cd frontend && npm run format    # Format frontend
+cd backend && npm run format     # Format backend
 ```
 
 ### Project Structure
