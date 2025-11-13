@@ -907,14 +907,10 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
       return;
     }
 
-    console.log('Ending round:', roundNumber);
-    console.log('Contacts:', round.contacts);
-    console.log('Clue word:', round.clueWord);
-    console.log('Time expired:', timeExpired);
+    // Fixed: remove noisy logging that flooded production logs, keep logic below quiet unless errors occur
 
     // Check if contacts match the clue word
     const contactResult = checkContactMatch(round.contacts, round.clueWord);
-    console.log('Contact result:', contactResult);
 
     let newLetter = null;
     let contactSuccessful = false;

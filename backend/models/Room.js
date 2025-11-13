@@ -11,9 +11,24 @@ export class Room {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
   }
 
+  // Fixed: Add retry logic to avoid roomId collision under high load
+  static async generateUniqueRoomId() {
+    const db = getDB();
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const roomId = this.generateRoomId();
+      const existing = await db
+        .collection(COLLECTION_NAME)
+        .findOne({ roomId }, { projection: { _id: 1 } });
+      if (!existing) {
+        return roomId;
+      }
+    }
+    throw new Error('Unable to generate unique room ID after multiple attempts');
+  }
+
   static async create(adminId, adminNickname) {
     const db = getDB();
-    const roomId = this.generateRoomId();
+    const roomId = await this.generateUniqueRoomId();
 
     const room = {
       roomId,
