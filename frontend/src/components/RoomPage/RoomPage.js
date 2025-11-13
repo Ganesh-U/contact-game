@@ -272,11 +272,19 @@ function RoomPage({ playerId, nickname, setNickname }) {
 
   const handleLeaveRoom = async () => {
     try {
-      emit('leave_room', { roomId, playerId });
-      await api.removePlayer(roomId, playerId);
-      navigate('/');
+      if (isConnected) {
+        emit('leave_room', { roomId, playerId });
+        // Fixed: rely on the socket leave flow to remove the player; avoid
+        // calling the REST endpoint twice and spamming 404s when the room is
+        // already gone.
+      } else {
+        // Fallback when we have no socket connection so the server still
+        // removes the player (room-delete timing is much less of an issue).
+        await api.removePlayer(roomId, playerId);
+      }
     } catch (err) {
       console.error('Error leaving room:', err);
+    } finally {
       navigate('/');
     }
   };
