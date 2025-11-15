@@ -169,6 +169,7 @@ contact-game/
 │   ├── utils/
 │   │   └── gameLogic.js          # Game mechanics utilities
 │   ├── scripts/
+│   │   ├── words.json            # Words JSON
 │   │   └── seed.js               # Database seeding script
 │   ├── server.js                 # Express server setup
 │   ├── eslint.config.js          # ESLint configuration
@@ -177,8 +178,7 @@ contact-game/
 ├── frontend/                     # React frontend
 │   ├── public/
 │   │   ├── index.html            # HTML template
-│   │   ├── manifest.json         # PWA manifest
-│   │   └── favicon.ico           # Site icon
+│   │   └── manifest.json         # PWA manifest
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── HomePage/
