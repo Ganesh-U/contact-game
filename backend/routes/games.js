@@ -29,7 +29,6 @@ router.post('/', async (req, res) => {
     );
     res.status(201).json(game);
   } catch (error) {
-    console.error('Error creating game:', error);
     res.status(500).json({ error: 'Failed to create game' });
   }
 });
@@ -46,7 +45,6 @@ router.get('/:gameId', async (req, res) => {
 
     res.json(game);
   } catch (error) {
-    console.error('Error fetching game:', error);
     res.status(500).json({ error: 'Failed to fetch game' });
   }
 });
@@ -58,7 +56,6 @@ router.get('/room/:roomId', async (req, res) => {
     const games = await Game.findByRoomId(roomId);
     res.json(games);
   } catch (error) {
-    console.error('Error fetching games:', error);
     res.status(500).json({ error: 'Failed to fetch games' });
   }
 });
@@ -75,7 +72,6 @@ router.get('/room/:roomId/active', async (req, res) => {
 
     res.json(game);
   } catch (error) {
-    console.error('Error fetching active game:', error);
     res.status(500).json({ error: 'Failed to fetch active game' });
   }
 });
@@ -89,7 +85,6 @@ router.put('/:gameId', async (req, res) => {
     const updatedGame = await Game.updateGame(gameId, updates);
     res.json(updatedGame);
   } catch (error) {
-    console.error('Error updating game:', error);
     res.status(500).json({ error: 'Failed to update game' });
   }
 });
@@ -103,7 +98,6 @@ router.put('/:gameId/complete', async (req, res) => {
     const completedGame = await Game.completeGame(gameId, winnerId);
     res.json(completedGame);
   } catch (error) {
-    console.error('Error completing game:', error);
     res.status(500).json({ error: 'Failed to complete game' });
   }
 });
@@ -115,7 +109,6 @@ router.delete('/:gameId', async (req, res) => {
     await Game.deleteGame(gameId);
     res.json({ message: 'Game deleted successfully' });
   } catch (error) {
-    console.error('Error deleting game:', error);
     res.status(500).json({ error: 'Failed to delete game' });
   }
 });
@@ -126,7 +119,6 @@ router.get('/', async (req, res) => {
     const games = await Game.getAllGames();
     res.json(games);
   } catch (error) {
-    console.error('Error fetching games:', error);
     res.status(500).json({ error: 'Failed to fetch games' });
   }
 });

@@ -34,8 +34,6 @@ export function getFirstToGuessBonus() {
 }
 
 export function checkContactMatch(contacts, clueWord) {
-  console.log('Number of contacts:', contacts.length);
-
   if (contacts.length === 0) {
     return { matched: false, matchedWord: null, matchedPlayers: [] };
   }

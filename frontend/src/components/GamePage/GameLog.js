@@ -6,7 +6,6 @@ function GameLog({ gameLog }) {
   const logEndRef = useRef(null);
 
   useEffect(() => {
-    console.log('GameLog updated, entries:', gameLog.length);
     logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [gameLog]);
 

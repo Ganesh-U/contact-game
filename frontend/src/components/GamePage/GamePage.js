@@ -187,7 +187,6 @@ function GamePage({ playerId }) {
   };
 
   const handleClueSubmitted = ({ game: updatedGame, isSecondClue }) => {
-    console.log('Clue submitted, game log:', updatedGame.gameLog);
     setGame(updatedGame);
     if (!isSecondClue) {
       setClueWord('');

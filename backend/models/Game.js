@@ -349,6 +349,8 @@ export class Game {
 
   static async validateWord(word) {
     const db = getDB();
-    return await db.collection('words').findOne({ words: word.toLowerCase() });
+    return (await db.collection('words').findOne({ word: word.toLowerCase() }))
+      ? true
+      : false;
   }
 }

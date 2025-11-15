@@ -86,13 +86,6 @@ function RoomPage({ playerId, nickname, setNickname }) {
         (p) => p.playerId === playerId
       );
 
-      console.log('loadRoom check:', {
-        playerId,
-        playerInRoom,
-        hasNickname: !!nickname,
-        roomPlayers: roomData.players.map((p) => p.playerId),
-      });
-
       if (playerInRoom) {
         setRoom(roomData);
         setLoading(false);

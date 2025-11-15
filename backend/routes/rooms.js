@@ -17,7 +17,6 @@ router.post('/', async (req, res) => {
     const room = await Room.create(adminId, adminNickname);
     res.status(201).json(room);
   } catch (error) {
-    console.error('Error creating room:', error);
     res.status(500).json({ error: 'Failed to create room' });
   }
 });
@@ -34,7 +33,6 @@ router.get('/:roomId', async (req, res) => {
 
     res.json(room);
   } catch (error) {
-    console.error('Error fetching room:', error);
     res.status(500).json({ error: 'Failed to fetch room' });
   }
 });
@@ -63,7 +61,6 @@ router.put('/:roomId/settings', async (req, res) => {
     const updatedRoom = await Room.updateSettings(roomId, settings);
     res.json(updatedRoom);
   } catch (error) {
-    console.error('Error updating room settings:', error);
     res.status(500).json({ error: 'Failed to update room settings' });
   }
 });
@@ -83,7 +80,6 @@ router.post('/:roomId/players', async (req, res) => {
     const updatedRoom = await Room.addPlayer(roomId, playerId, nickname);
     res.json(updatedRoom);
   } catch (error) {
-    console.error('Error adding player:', error);
     res.status(500).json({
       error: error.message || 'Failed to add player',
     });
@@ -109,7 +105,6 @@ router.delete('/:roomId/players/:playerId', async (req, res) => {
 
     res.json(updatedRoom);
   } catch (error) {
-    console.error('Error removing player:', error);
     res.status(500).json({ error: 'Failed to remove player' });
   }
 });
@@ -129,7 +124,6 @@ router.put('/:roomId/players/:playerId/role', async (req, res) => {
     const updatedRoom = await Room.updatePlayerRole(roomId, playerId, role);
     res.json(updatedRoom);
   } catch (error) {
-    console.error('Error updating player role:', error);
     res.status(500).json({ error: 'Failed to update player role' });
   }
 });
@@ -149,7 +143,6 @@ router.put('/:roomId/status', async (req, res) => {
     const updatedRoom = await Room.updateStatus(roomId, status);
     res.json(updatedRoom);
   } catch (error) {
-    console.error('Error updating room status:', error);
     res.status(500).json({ error: 'Failed to update room status' });
   }
 });
@@ -173,7 +166,6 @@ router.delete('/:roomId', async (req, res) => {
     await Room.deleteRoom(roomId);
     res.json({ message: 'Room deleted successfully' });
   } catch (error) {
-    console.error('Error deleting room:', error);
     res.status(500).json({ error: 'Failed to delete room' });
   }
 });
@@ -184,7 +176,6 @@ router.get('/', async (req, res) => {
     const rooms = await Room.getAllRooms();
     res.json(rooms);
   } catch (error) {
-    console.error('Error fetching rooms:', error);
     res.status(500).json({ error: 'Failed to fetch rooms' });
   }
 });

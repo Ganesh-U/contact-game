@@ -1,8 +1,5 @@
-const API_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5001';
-
 async function request(endpoint, options = {}) {
-  const url = `${API_URL}${endpoint}`;
+  const url = `${endpoint}`;
   const config = {
     ...options,
     headers: {

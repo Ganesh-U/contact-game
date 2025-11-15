@@ -13,12 +13,7 @@ import {
 } from '../utils/gameLogic.js';
 
 export function initializeGameSocket(server, sessionMiddleware) {
-  const io = new Server(server, {
-    cors: {
-      origin: process.env.CLIENT_URL || 'http://localhost:3000',
-      credentials: true,
-    },
-  });
+  const io = new Server(server);
 
   // Convert Express session middleware to Socket.io middleware
   io.use((socket, next) => {
@@ -228,7 +223,6 @@ export function initializeGameSocket(server, sessionMiddleware) {
             });
             return;
           }
-
           const wordExists = await Game.validateWord(targetWord);
           if (!wordExists) {
             socket.emit('error', {
@@ -906,15 +900,8 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
       console.error('Round not found');
       return;
     }
-
-    console.log('Ending round:', roundNumber);
-    console.log('Contacts:', round.contacts);
-    console.log('Clue word:', round.clueWord);
-    console.log('Time expired:', timeExpired);
-
     // Check if contacts match the clue word
     const contactResult = checkContactMatch(round.contacts, round.clueWord);
-    console.log('Contact result:', contactResult);
 
     let newLetter = null;
     let contactSuccessful = false;
@@ -931,7 +918,6 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
       newLetter = getNextRevealedLetter(game.targetWord, game.revealedLetters);
 
       if (newLetter) {
-        console.log('Revealing new letter:', newLetter);
         // Award points
         const contactPoints = getContactSuccessPoints();
 
