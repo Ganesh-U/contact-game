@@ -121,8 +121,8 @@ cd contact-game
 
 # (Optional) Setup environment variables
 # Copy the example file and customize if needed
-cp backend/.env.example backend/.env
-# Edit backend/.env to customize MongoDB URI, port, or session secret
+cp .env.example .env
+# Edit .env to customize MongoDB URI, port, or session secret
 # Note: The app works without .env using sensible defaults
 
 # Start MongoDB (if using Docker)

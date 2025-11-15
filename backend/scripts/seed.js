@@ -23,7 +23,7 @@ async function seedWords() {
     const data = JSON.parse(await fs.readFile('scripts/words.json', 'utf8'));
 
     // ---- 3 Prepare entries ----
-    const entries = Object.keys(data).map((word) => ({ word }));
+    const entries = Object.keys(data).map((words) => ({ words }));
 
     // ---- 4 Clear and insert ----
     await collection.deleteMany({});
