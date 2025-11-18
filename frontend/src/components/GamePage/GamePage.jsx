@@ -1,3 +1,4 @@
+// The file is huge. can split this into individual pieces.
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
