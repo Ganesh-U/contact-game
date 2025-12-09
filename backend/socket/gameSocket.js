@@ -247,8 +247,11 @@ export function initializeGameSocket(server, sessionMiddleware) {
           const logMessage = `${player.nickname} updated their contact guess`;
           await Game.addGameLogEntry(gameId, 'contact_updated', logMessage);
 
+          // Get fresh game with updated log
+          const gameWithLog = await Game.findByGameId(gameId);
+
           io.to(roomId).emit('contact_updated', {
-            game: updatedGame,
+            game: gameWithLog,
             playerId,
           });
         } catch (error) {
@@ -275,8 +278,11 @@ export function initializeGameSocket(server, sessionMiddleware) {
           const logMessage = `${player.nickname} removed their contact`;
           await Game.addGameLogEntry(gameId, 'contact_removed', logMessage);
 
+          // Get fresh game with updated log
+          const gameWithLog = await Game.findByGameId(gameId);
+
           io.to(roomId).emit('contact_updated', {
-            game: updatedGame,
+            game: gameWithLog,
             playerId,
           });
         } catch (error) {

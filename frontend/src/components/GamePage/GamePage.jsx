@@ -146,6 +146,26 @@ function GamePage({ playerId }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showRoundTransition]);
 
+  // Restore contact state if page is reloaded
+  useEffect(() => {
+    if (!game || !game.rounds || game.rounds.length === 0) return;
+
+    const currentRound = game.rounds[game.rounds.length - 1];
+    
+    // Check if we have already submitted a contact for this round
+    if (currentRound && currentRound.contacts) {
+      const myContact = currentRound.contacts.find(c => c.playerId === playerId);
+      
+      if (myContact) {
+        setHasClickedContact(true);
+        // Only update local text if it's empty (don't overwrite user typing)
+        if (!contactWord) {
+          setContactWord(myContact.word);
+        }
+      }
+    }
+  }, [game, playerId]);
+
   // Restore timer state if page is reloaded
   useEffect(() => {
     if (!game || !room) return;
@@ -528,6 +548,9 @@ function GamePage({ playerId }) {
     playerNicknames[p.playerId] = p.nickname;
   });
 
+  // Calculate submitted contact for current player
+  const submittedContact = currentRound?.contacts?.find(c => c.playerId === playerId)?.word || '';
+
   return (
     <div className="game-page">
       <div className="game-layout">
@@ -811,7 +834,7 @@ function GamePage({ playerId }) {
                               variant="secondary"
                               size="small"
                               onClick={handleUpdateContact}
-                              disabled={!contactWord.trim()}
+                              disabled={!contactWord.trim() || contactWord.trim().toUpperCase() === submittedContact}
                             >
                               Update
                             </Button>
