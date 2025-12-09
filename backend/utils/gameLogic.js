@@ -1,7 +1,6 @@
 // Points calculation constants
 const POINTS = {
   TARGET_WORD_BASE: 100,
-  TARGET_WORD_PER_LETTER_PENALTY: 10,
   CONTACT_SUCCESS_CLUE_GIVER: 20,
   CONTACT_SUCCESS_GUESSER: 15,
   WORDMASTER_CORRECT_BLOCK: 10,
@@ -9,13 +8,10 @@ const POINTS = {
 };
 
 export function calculateTargetWordPoints(
-  revealedLettersCount,
+  _revealedLettersCount,
   _targetWordLength
 ) {
-  const basePoints = POINTS.TARGET_WORD_BASE;
-  const penalty =
-    (revealedLettersCount - 1) * POINTS.TARGET_WORD_PER_LETTER_PENALTY;
-  return Math.max(basePoints - penalty, 20); // Minimum 20 points
+  return POINTS.TARGET_WORD_BASE;
 }
 
 export function getContactSuccessPoints() {

@@ -124,14 +124,13 @@ function HomePage({ playerId, nickname, setNickname }) {
             <h3>Points System</h3>
             <ul>
               <li>
-                Correct secret word guess: Base points (reduces per letter
-                revealed)
+                Secret Word guess: 100 points
               </li>
               <li>
-                Successful contact: Points to clue-giver and matching guessers
+                Successful contact: 20 points to clue-giver, 15 points to matching guessers
               </li>
-              <li>Wordmaster correct block: Points to Wordmaster</li>
-              <li>First to guess bonus: Extra points</li>
+              <li>Wordmaster correct block: 10 points</li>
+              <li>First to guess bonus: 25 points</li>
             </ul>
           </div>
         </section>
