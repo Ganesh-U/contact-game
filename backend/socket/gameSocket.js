@@ -383,6 +383,13 @@ export function initializeGameSocket(server, sessionMiddleware) {
             await Game.updateScore(gameId, playerId, totalPoints);
             await Game.completeGame(gameId, playerId);
 
+            // Clear any active round timer
+            const timerKey = `${gameId}_${game.currentRound}`;
+            if (roundTimers.has(timerKey)) {
+              clearTimeout(roundTimers.get(timerKey));
+              roundTimers.delete(timerKey);
+            }
+
             const finalGame = await Game.findByGameId(gameId);
 
             const finalLogMessage = `Game completed! ${player.nickname} wins with ${finalGame.scores[playerId]} points!`;
@@ -713,6 +720,12 @@ async function handleRoundTimeout(gameId, roomId, roundNumber, io) {
 async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
   try {
     const game = await Game.findByGameId(gameId);
+
+    // If game is already completed, do not process round end
+    if (game.status === 'completed') {
+      return;
+    }
+
     const room = await Room.findByRoomId(roomId);
     const round = game.rounds.find((r) => r.roundNumber === roundNumber);
 

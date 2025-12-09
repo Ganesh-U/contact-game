@@ -9,13 +9,14 @@ function Button({
   disabled = false,
   fullWidth = false,
   type = 'button',
+  className = '',
 }) {
   return (
     <button
       type={type}
       className={`btn btn-${variant} btn-${size} ${
         fullWidth ? 'btn-full-width' : ''
-      }`}
+      } ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
@@ -32,6 +33,7 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   fullWidth: PropTypes.bool,
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
+  className: PropTypes.string,
 };
 
 export default Button;

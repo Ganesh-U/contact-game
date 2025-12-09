@@ -39,7 +39,7 @@ function GamePage({ playerId }) {
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showRoundTransition, setShowRoundTransition] = useState(false);
   const [roundTransitionData, setRoundTransitionData] = useState(null);
-  const [transitionCountdown, setTransitionCountdown] = useState(15);
+  const [transitionCountdown, setTransitionCountdown] = useState(20);
   const [showVictoryTransition, setShowVictoryTransition] = useState(false);
   const [victoryData, setVictoryData] = useState(null);
 
@@ -100,24 +100,7 @@ function GamePage({ playerId }) {
   const handleGameEndedDisconnect = ({ reason, disconnectedPlayer }) => {
     alert(`Game ended: ${disconnectedPlayer} disconnected. ${reason}`);
 
-    // Reset all game state before navigating
-    setGame(null);
-    setClueWord('');
-    setClue('');
-    setSecondClue('');
-    setContactWord('');
-    setHasClickedContact(false);
-    setWordmasterGuess('');
-    setTargetWordGuess('');
-    setCanGuessTarget(true);
-    setRoundEndTime(null);
-    setHalfRoundTime(null);
-    setCanGiveSecondClue(false);
-    setShowGameOverModal(false);
-    setShowRoundTransition(false);
-    setRoundTransitionData(null);
-    setShowVictoryTransition(false);
-    setVictoryData(null);
+
 
     navigate(`/room/${roomId}`);
   };
@@ -132,13 +115,20 @@ function GamePage({ playerId }) {
     }
   }, [error]);
 
+  const closeRoundTransition = () => {
+    setShowRoundTransition(false);
+    setRoundTransitionData(null);
+    resetRoundState();
+  };
+
   useEffect(() => {
     if (showRoundTransition) {
-      setTransitionCountdown(15);
+      setTransitionCountdown(20);
       const interval = setInterval(() => {
         setTransitionCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(interval);
+            closeRoundTransition();
             return 0;
           }
           return prev - 1;
@@ -147,6 +137,7 @@ function GamePage({ playerId }) {
 
       return () => clearInterval(interval);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showRoundTransition]);
 
   useEffect(() => {
@@ -256,12 +247,6 @@ function GamePage({ playerId }) {
       failureReason,
     });
     setShowRoundTransition(true);
-
-    setTimeout(() => {
-      setShowRoundTransition(false);
-      setRoundTransitionData(null);
-      resetRoundState();
-    }, 15000); // 15 seconds
   };
 
   const handleNextRoundStarted = ({ game: updatedGame }) => {
@@ -446,25 +431,6 @@ function GamePage({ playerId }) {
 
   const handleBackToRoom = async () => {
     try {
-      // Reset all game state before navigating
-      setGame(null);
-      setClueWord('');
-      setClue('');
-      setSecondClue('');
-      setContactWord('');
-      setHasClickedContact(false);
-      setWordmasterGuess('');
-      setTargetWordGuess('');
-      setCanGuessTarget(true);
-      setRoundEndTime(null);
-      setHalfRoundTime(null);
-      setCanGiveSecondClue(false);
-      setShowGameOverModal(false);
-      setShowRoundTransition(false);
-      setRoundTransitionData(null);
-      setShowVictoryTransition(false);
-      setVictoryData(null);
-
       // Update room status back to waiting
       await fetch(
         `${process.env.REACT_APP_API_URL || 'http://localhost:5001'}/api/rooms/${roomId}/status`,
@@ -906,7 +872,15 @@ function GamePage({ playerId }) {
             <h2>Round Ended!</h2>
 
             <div className="transition-timer">
-              Next round starts in: <strong>{transitionCountdown}s</strong>
+              <p>Next round starts in: <strong>{transitionCountdown}s</strong></p>
+              <Button 
+                variant="secondary" 
+                size="small" 
+                onClick={closeRoundTransition}
+                className="skip-button"
+              >
+                Skip Wait
+              </Button>
             </div>
 
             <div className="reveal-section">
