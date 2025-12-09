@@ -59,6 +59,9 @@ router.put('/:roomId/settings', async (req, res) => {
     };
 
     const updatedRoom = await Room.updateSettings(roomId, settings);
+    
+    req.app.get('io').to(roomId).emit('room_updated', updatedRoom);
+    
     res.json(updatedRoom);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update room settings' });
@@ -78,6 +81,9 @@ router.post('/:roomId/players', async (req, res) => {
     }
 
     const updatedRoom = await Room.addPlayer(roomId, playerId, nickname);
+    
+    req.app.get('io').to(roomId).emit('room_updated', updatedRoom);
+    
     res.json(updatedRoom);
   } catch (error) {
     res.status(500).json({
@@ -91,16 +97,40 @@ router.delete('/:roomId/players/:playerId', async (req, res) => {
   try {
     const { roomId, playerId } = req.params;
 
+    // Get room first to get player nickname for notification
+    const room = await Room.findByRoomId(roomId);
+    if (!room) {
+      return res.status(404).json({ error: 'Room not found' });
+    }
+    
+    const playerToRemove = room.players.find(p => p.playerId === playerId);
+
     const updatedRoom = await Room.removePlayer(roomId, playerId);
 
     if (!updatedRoom) {
-      return res.status(404).json({ error: 'Room not found' });
+      // Room was deleted because it was empty, or it wasn't found
+      // Verify if it was deleted
+      const checkRoom = await Room.findByRoomId(roomId);
+      if (!checkRoom) {
+          return res.json({ message: 'Room deleted - no players remaining' });
+      }
+      return res.status(404).json({ error: 'Room not found after removal' });
     }
 
     // If no players left, delete the room
     if (updatedRoom.players.length === 0) {
       await Room.deleteRoom(roomId);
       return res.json({ message: 'Room deleted - no players remaining' });
+    }
+
+    const io = req.app.get('io');
+    io.to(roomId).emit('room_updated', updatedRoom);
+    
+    if (playerToRemove) {
+        io.to(roomId).emit('player_left', { 
+            playerId, 
+            nickname: playerToRemove.nickname 
+        });
     }
 
     res.json(updatedRoom);
@@ -122,6 +152,9 @@ router.put('/:roomId/players/:playerId/role', async (req, res) => {
     }
 
     const updatedRoom = await Room.updatePlayerRole(roomId, playerId, role);
+    
+    req.app.get('io').to(roomId).emit('room_updated', updatedRoom);
+    
     res.json(updatedRoom);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update player role' });
@@ -134,13 +167,29 @@ router.put('/:roomId/status', async (req, res) => {
     const { roomId } = req.params;
     const { status } = req.body;
 
-    if (!['waiting', 'in-game', 'completed'].includes(status)) {
+    if (!['waiting', 'in-game', 'completed', 'starting'].includes(status)) {
       return res.status(400).json({
         error: 'Invalid status',
       });
     }
 
     const updatedRoom = await Room.updateStatus(roomId, status);
+    
+    const io = req.app.get('io');
+    io.to(roomId).emit('room_updated', updatedRoom);
+    
+    // Handle 'starting' status (Wordmaster choosing phase)
+    if (status === 'starting') {
+        const wordmaster = updatedRoom.players.find(p => p.role === 'wordmaster');
+        if (wordmaster) {
+            io.to(roomId).emit('wordmaster_choosing', {
+                wordmasterId: wordmaster.playerId,
+                wordmasterNickname: wordmaster.nickname,
+            });
+            io.to(roomId).emit('show_target_word_modal', { wordmasterId: wordmaster.playerId });
+        }
+    }
+
     res.json(updatedRoom);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update room status' });

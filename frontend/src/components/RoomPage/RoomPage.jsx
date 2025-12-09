@@ -200,16 +200,21 @@ function RoomPage({ playerId, nickname, setNickname }) {
     setTimeout(() => setError(''), 5000);
   };
 
-  const handleRoleSelect = (role) => {
+  const handleRoleSelect = async (role) => {
     if (!room) return;
 
     const currentPlayer = room.players.find((p) => p.playerId === playerId);
     if (!currentPlayer) return;
 
-    emit('update_role', { roomId, playerId, role });
+    try {
+      await api.updatePlayerRole(roomId, playerId, role);
+    } catch (err) {
+      console.error('Failed to update role:', err);
+      setError('Failed to update role');
+    }
   };
 
-  const handleSettingsChange = (field, value) => {
+  const handleSettingsChange = async (field, value) => {
     if (!room || room.adminId !== playerId) return;
 
     const settings = {
@@ -217,10 +222,15 @@ function RoomPage({ playerId, nickname, setNickname }) {
       [field]: parseInt(value),
     };
 
-    emit('update_settings', { roomId, settings });
+    try {
+      await api.updateRoomSettings(roomId, playerId, settings);
+    } catch (err) {
+      console.error('Failed to update settings:', err);
+      setError('Failed to update settings');
+    }
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = async () => {
     if (!room || room.adminId !== playerId) return;
 
     const wordmaster = room.players.find((p) => p.role === 'wordmaster');
@@ -242,10 +252,16 @@ function RoomPage({ playerId, nickname, setNickname }) {
       return;
     }
 
-    emit('request_target_word', { roomId, wordmasterId: wordmaster.playerId });
+    try {
+      // Set status to 'starting' to trigger wordmaster choosing phase
+      await api.updateRoomStatus(roomId, 'starting');
+    } catch (err) {
+      console.error('Failed to start game:', err);
+      setError('Failed to start game');
+    }
   };
 
-  const handleSubmitTargetWord = () => {
+  const handleSubmitTargetWord = async () => {
     if (!targetWord.trim() || targetWord.length < 5) {
       setError('Secret word must be at least 5 letters');
       return;
@@ -253,19 +269,29 @@ function RoomPage({ playerId, nickname, setNickname }) {
 
     const wordmaster = room.players.find((p) => p.role === 'wordmaster');
 
-    emit('start_game', {
-      roomId,
-      wordmasterId: wordmaster.playerId,
-      targetWord: targetWord.trim().toUpperCase(),
-      wordType,
-    });
+    try {
+      const wordmaster = room.players.find((p) => p.role === 'wordmaster');
+      
+      await api.createGame(
+        roomId,
+        wordmaster.playerId,
+        targetWord.trim().toUpperCase(),
+        wordType,
+        room.players
+      );
+      
+      setShowTargetWordModal(false);
+    } catch (err) {
+      console.error('Failed to create game:', err);
+      setError(err.message || 'Failed to create game');
+    }
 
     setShowTargetWordModal(false);
   };
 
   const handleLeaveRoom = async () => {
     try {
-      emit('leave_room', { roomId, playerId });
+      // Socket disconnects automatically on unmount/navigate
       await api.removePlayer(roomId, playerId);
       navigate('/');
     } catch (err) {
@@ -275,11 +301,14 @@ function RoomPage({ playerId, nickname, setNickname }) {
   };
 
   const handleKickPlayer = (playerIdToKick) => {
-    emit('kick_player', {
-      roomId,
-      playerId: playerIdToKick,
-      adminId: playerId,
-    });
+    try {
+      api.removePlayer(roomId, playerIdToKick).catch(err => {
+          console.error('Error kicking player:', err);
+          setError('Failed to kick player');
+      });
+    } catch (err) {
+        console.error('Error kicking player:', err);
+    }
   };
 
   const copyRoomCode = () => {

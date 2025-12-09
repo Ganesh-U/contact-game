@@ -27,8 +27,33 @@ router.post('/', async (req, res) => {
       wordType,
       players
     );
+
+    // Update room status
+    const { Room } = await import('../models/Room.js'); // Dynamic import to avoid circular dependency if any
+    await Room.updateStatus(roomId, 'in-game');
+
+    // Start first round
+    const guessers = players.filter((p) => p.role === 'guesser');
+    // Get settings for wordmaster guesses
+    const room = await Room.findByRoomId(roomId);
+    
+    const firstRound = await Game.startNewRound(game.gameId, {
+      clueGiverId: guessers[0].playerId,
+      wordmasterGuessesLimit: room.settings.wordmasterGuesses,
+    });
+
+    await Game.addGameLogEntry(
+      game.gameId,
+      'round_started',
+      `Round 1 started`,
+      { roundNumber: 1, clueGiverId: guessers[0].playerId }
+    );
+
+    req.app.get('io').to(roomId).emit('game_started', firstRound);
+
     res.status(201).json(game);
   } catch (error) {
+    console.error('Error creating game:', error);
     res.status(500).json({ error: 'Failed to create game' });
   }
 });

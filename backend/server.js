@@ -72,7 +72,8 @@ app.use((err, req, res, _next) => {
 async function startServer() {
   try {
     await connectDB();
-    initializeGameSocket(server, sessionMiddleware);
+    const io = initializeGameSocket(server, sessionMiddleware);
+    app.set('io', io);
 
     server.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
