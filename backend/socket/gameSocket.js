@@ -105,6 +105,18 @@ export function initializeGameSocket(server, sessionMiddleware) {
       }
     });
 
+    // Player returned to lobby / is ready
+    socket.on('player_ready', async ({ roomId, playerId }) => {
+      try {
+        const room = await Room.setPlayerReady(roomId, playerId, true);
+        if (room) {
+          io.to(roomId).emit('room_updated', room);
+        }
+      } catch (error) {
+        console.error('Error setting player ready:', error);
+      }
+    });
+
     // Data updates are now handled via REST API, which emits events.
     // Socket only handles connection/room joining and high-frequency game moves.
 

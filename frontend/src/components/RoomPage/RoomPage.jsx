@@ -38,6 +38,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
     if (!isConnected || !socket) return;
 
     emit('join_room', { roomId, playerId });
+    emit('player_ready', { roomId, playerId });
 
     on('room_updated', handleRoomUpdate);
     on('game_started', handleGameStarted);
@@ -250,6 +251,12 @@ function RoomPage({ playerId, nickname, setNickname }) {
     if (guessers.length < 2) {
       setError('Need at least 2 Guessers to start the game');
       return;
+    }
+
+    const allPlayersReady = room.players.every((p) => p.isReady);
+    if (!allPlayersReady) {
+        setError('Waiting for all players to return to the lobby');
+        return;
     }
 
     try {

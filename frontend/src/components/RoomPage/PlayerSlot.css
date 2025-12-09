@@ -43,27 +43,38 @@
 }
 
 .player-nickname {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: var(--text-primary);
   text-align: center;
+  margin-bottom: 0.2rem;
 }
 
 .you-badge {
   background-color: var(--accent-primary);
   color: white;
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .admin-badge {
-  font-size: 1.2rem;
-  margin-left: 0.3rem;
-  cursor: help;
-  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5));
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-left: 0.5rem;
+}
+
+.admin-badge.host {
+  background-color: #f59e0b; /* Amber-500 */
+  color: #1a1a1a;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
 .role-badge {
@@ -231,4 +242,54 @@
 
 .kick-confirm-no:hover {
   background-color: var(--bg-secondary);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-left: 0.5rem;
+  animation: popIn 0.3s ease-out;
+}
+
+.status-badge.ready {
+  background-color: var(--success, #10b981);
+  color: white;
+}
+
+.status-badge.connecting {
+  background-color: var(--warning, #eab308);
+  color: #1a1a1a;
+  animation: pulse 2s infinite;
+}
+
+.status-badge.disconnected {
+  background-color: var(--error, #ef4444);
+  color: white;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
 }

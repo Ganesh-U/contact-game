@@ -62,12 +62,12 @@ function PlayerSlot({
       <div className="slot-content">
         <div className="player-info">
           <span className="player-nickname">{player.nickname}</span>
-          {isRoomAdmin && (
-            <span className="admin-badge" title="Room Admin">
-              🫅🏻
-            </span>
+          {player.isReady ? (
+            <span className="status-badge ready">READY</span>
+          ) : (
+            <span className="status-badge connecting">CONNECTING...</span>
           )}
-          {isCurrentPlayer && <span className="you-badge">YOU</span>}
+          {isRoomAdmin && <span className="admin-badge host">HOST</span>}
         </div>
 
         {player.role === 'wordmaster' && (

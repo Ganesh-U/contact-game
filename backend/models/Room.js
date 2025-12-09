@@ -19,7 +19,7 @@ export class Room {
           playerId: adminId,
           nickname: adminNickname,
           role: null,
-          isReady: false,
+          isReady: true,
           joinedAt: new Date(),
         },
       ],
@@ -66,7 +66,9 @@ export class Room {
     }
 
     if (room.players.some((p) => p.playerId === playerId)) {
-      return room; // Player already in room
+      // Ensure existing player is marked ready on re-join/refresh
+      await this.setPlayerReady(roomId, playerId, true);
+      return await this.findByRoomId(roomId);
     }
 
     const result = await db.collection(COLLECTION_NAME).findOneAndUpdate(
@@ -77,7 +79,7 @@ export class Room {
             playerId,
             nickname,
             role: null,
-            isReady: false,
+            isReady: true,
             joinedAt: new Date(),
           },
         },
@@ -86,6 +88,39 @@ export class Room {
       { returnDocument: 'after' }
     );
 
+    return result;
+  }
+
+  static async setPlayerReady(roomId, playerId, isReady) {
+    const db = getDB();
+    const result = await db.collection(COLLECTION_NAME).findOneAndUpdate(
+      { roomId, 'players.playerId': playerId },
+      {
+        $set: {
+          'players.$.isReady': isReady,
+          updatedAt: new Date(),
+        },
+      },
+      { returnDocument: 'after' }
+    );
+    return result;
+  }
+
+  static async resetAllPlayersReady(roomId) {
+    const db = getDB();
+    // Set all players' isReady to false
+    // We need to use updateOne/updateMany with array filters or just set the field for all elements if possible
+    // MongoDB $[] operator updates all elements in array
+    const result = await db.collection(COLLECTION_NAME).findOneAndUpdate(
+      { roomId },
+      {
+        $set: {
+          'players.$[].isReady': false,
+          updatedAt: new Date(),
+        },
+      },
+      { returnDocument: 'after' }
+    );
     return result;
   }
 
@@ -152,6 +187,9 @@ export class Room {
   }
 
   static async updateStatus(roomId, status) {
+    if (status === 'starting') {
+      await this.resetAllPlayersReady(roomId);
+    }
     return await this.updateRoom(roomId, { status });
   }
 
