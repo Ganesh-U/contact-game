@@ -10,6 +10,7 @@ function PlayerSlot({
   slotIndex,
   allPlayers,
   isAdmin,
+  isRoomAdmin,
   onKickPlayer,
 }) {
   const [showKickConfirm, setShowKickConfirm] = useState(false);
@@ -61,6 +62,11 @@ function PlayerSlot({
       <div className="slot-content">
         <div className="player-info">
           <span className="player-nickname">{player.nickname}</span>
+          {isRoomAdmin && (
+            <span className="admin-badge" title="Room Admin">
+              🫅🏻
+            </span>
+          )}
           {isCurrentPlayer && <span className="you-badge">YOU</span>}
         </div>
 
@@ -153,6 +159,7 @@ PlayerSlot.propTypes = {
   allPlayers: PropTypes.array,
   isAdmin: PropTypes.bool,
   onKickPlayer: PropTypes.func,
+  isRoomAdmin: PropTypes.bool,
 };
 
 export default PlayerSlot;

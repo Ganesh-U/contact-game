@@ -425,6 +425,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
                   slotIndex={index}
                   allPlayers={room?.players || []}
                   isAdmin={isAdmin}
+                  isRoomAdmin={room?.adminId === player?.playerId}
                   onKickPlayer={handleKickPlayer}
                 />
               );

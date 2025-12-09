@@ -140,6 +140,39 @@ function GamePage({ playerId }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showRoundTransition]);
 
+  // Restore timer state if page is reloaded
+  useEffect(() => {
+    if (!game || !room) return;
+
+    const currentRound = game.rounds[game.rounds.length - 1];
+
+    // Check if we have an active round with a submitted clue (which starts the timer)
+    if (
+      currentRound &&
+      currentRound.clueSubmittedAt &&
+      !currentRound.roundEndedAt
+    ) {
+      const startTime = new Date(currentRound.clueSubmittedAt).getTime();
+      const roundDuration = room.settings.roundTime * 60 * 1000;
+      const endTime = startTime + roundDuration;
+      const halfTime = startTime + roundDuration / 2;
+
+      // Only act if the timer would still be running
+      if (endTime > Date.now()) {
+        // Only update if not already set (to avoid overriding socket-synced time with local calc)
+        if (!roundEndTime) {
+          setRoundEndTime(endTime);
+          setHalfRoundTime(halfTime);
+        }
+
+        // Ensure second clue permission is correct based on restored time
+        if (Date.now() >= halfTime && !canGiveSecondClue) {
+          setCanGiveSecondClue(true);
+        }
+      }
+    }
+  }, [game, room, roundEndTime, canGiveSecondClue]);
+
   useEffect(() => {
     if (!halfRoundTime) return;
 
