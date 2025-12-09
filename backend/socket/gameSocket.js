@@ -757,6 +757,9 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
     // 3. Wordmaster ran out of guesses without blocking
     const wordmasterBlocked = round.wordmasterGuesses.some((g) => g.correct);
 
+    // Track points awarded this round
+    const pointsAwarded = {};
+
     if (!wordmasterBlocked && contactResult.matched && timeExpired) {
       contactSuccessful = true;
       // Successful contact - reveal next letter
@@ -772,11 +775,13 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
           round.clueGiverId,
           contactPoints.clueGiver
         );
+        pointsAwarded[round.clueGiverId] = contactPoints.clueGiver;
 
         // Award matching guessers
         for (const playerId of contactResult.matchedPlayers) {
           if (playerId !== round.clueGiverId) {
             await Game.updateScore(gameId, playerId, contactPoints.guesser);
+            pointsAwarded[playerId] = contactPoints.guesser;
           }
         }
 
@@ -805,6 +810,10 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
     const roundEndMessage = `Round ${roundNumber} ended.`;
     await Game.addGameLogEntry(gameId, 'round_ended', roundEndMessage);
 
+    // Get wordmaster's last relevant guess
+    const wmGuesses = round.wordmasterGuesses || [];
+    const lastWmGuess = wmGuesses.length > 0 ? wmGuesses[wmGuesses.length - 1] : null;
+
     io.to(roomId).emit('round_ended', {
       game: updatedGame,
       roundNumber,
@@ -813,8 +822,15 @@ async function handleRoundEnd(gameId, roomId, roundNumber, timeExpired, io) {
       revealedWords: round.contacts.map((c) => ({
         playerId: c.playerId,
         word: c.word,
+        isCorrect: c.word && checkClueWordGuess(c.word, round.clueWord),
       })),
       newLetter,
+      pointsAwarded,
+      wordmasterGuess: lastWmGuess ? {
+        guess: lastWmGuess.guess,
+        correct: lastWmGuess.correct
+      } : null,
+      correctContactPlayers: contactResult.matchedPlayers,
     });
 
     // Check if game should continue

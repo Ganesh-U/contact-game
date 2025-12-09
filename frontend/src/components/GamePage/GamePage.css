@@ -705,3 +705,55 @@
     font-size: 2rem;
   }
 }
+
+/* Points Awarded Section */
+.points-awarded {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.points-awarded h4 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.points-entry {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+}
+
+.points-entry strong {
+  color: var(--success);
+}
+
+/* Wordmaster Block Info */
+.wordmaster-block-info {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.wordmaster-block-info p {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.wordmaster-block-info strong {
+  color: var(--accent-secondary);
+}
+
+/* Contact Results */
+.guess-reveal.correct-contact {
+  background-color: rgba(16, 185, 129, 0.2);
+  border: 1px solid var(--success);
+}
+
+.guess-reveal.correct-contact strong {
+  color: var(--success);
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useSocket } from '../../hooks/useSocket';
@@ -42,6 +42,12 @@ function GamePage({ playerId }) {
   const [transitionCountdown, setTransitionCountdown] = useState(20);
   const [showVictoryTransition, setShowVictoryTransition] = useState(false);
   const [victoryData, setVictoryData] = useState(null);
+
+  const roomRef = useRef(null);
+
+  useEffect(() => {
+    roomRef.current = room;
+  }, [room]);
 
   useEffect(() => {
     loadGameAndRoom();
@@ -250,6 +256,9 @@ function GamePage({ playerId }) {
     contactSuccessful,
     clueWord,
     revealedWords,
+    pointsAwarded,
+    wordmasterGuess,
+    correctContactPlayers,
   }) => {
     setGame(updatedGame);
     setRoundEndTime(null);
@@ -261,7 +270,7 @@ function GamePage({ playerId }) {
     }
 
     const nicknames = {};
-    room?.players.forEach((p) => {
+    roomRef.current?.players.forEach((p) => {
       nicknames[p.playerId] = p.nickname;
     });
 
@@ -278,6 +287,9 @@ function GamePage({ playerId }) {
       newLetter,
       playerNicknames: nicknames,
       failureReason,
+      pointsAwarded,
+      wordmasterGuess,
+      correctContactPlayers,
     });
     setShowRoundTransition(true);
   };
@@ -300,7 +312,7 @@ function GamePage({ playerId }) {
 
     if (winnerId) {
       // Someone won - show victory transition first
-      const winner = room?.players.find((p) => p.playerId === winnerId);
+      const winner = roomRef.current?.players.find((p) => String(p.playerId) === String(winnerId));
       const winnerNickname = winner?.nickname || 'Unknown';
       const winnerScore = updatedGame.scores[winnerId] || 0;
 
@@ -923,13 +935,19 @@ function GamePage({ playerId }) {
               </p>
 
               <div className="guesses-reveal">
-                {roundTransitionData.revealedWords.map((item, index) => (
-                  <p key={index} className="guess-reveal">
-                    {roundTransitionData.playerNicknames[item.playerId] ||
-                      'Player'}{' '}
-                    guessed: <strong>{item.word}</strong>
-                  </p>
-                ))}
+                {roundTransitionData.revealedWords.map((item, index) => {
+                  const isCorrect = roundTransitionData.correctContactPlayers?.includes(item.playerId);
+                  return (
+                    <p 
+                      key={index} 
+                      className={`guess-reveal ${isCorrect ? 'correct-contact' : ''}`}
+                    >
+                      {roundTransitionData.playerNicknames[item.playerId] ||
+                        'Player'}{' '}
+                      guessed: <strong>{item.word}</strong>
+                    </p>
+                  );
+                })}
               </div>
             </div>
 
@@ -940,11 +958,30 @@ function GamePage({ playerId }) {
                   Next letter revealed:{' '}
                   <strong>{roundTransitionData.newLetter}</strong>
                 </p>
+                {/* Show points awarded */}
+                {roundTransitionData.pointsAwarded && Object.keys(roundTransitionData.pointsAwarded).length > 0 && (
+                  <div className="points-awarded">
+                    <h4>Points Earned:</h4>
+                    {Object.entries(roundTransitionData.pointsAwarded).map(([pid, points]) => (
+                      <p key={pid} className="points-entry">
+                        {roundTransitionData.playerNicknames[pid] || 'Unknown'}: <strong>+{points} pts</strong>
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="contact-result failed">
                 <h3>❌ Contact Failed</h3>
                 <p>{roundTransitionData.failureReason}</p>
+                
+                {/* Show wordmaster info if they blocked it */}
+                {roundTransitionData.wordmasterGuess && (
+                   <div className="wordmaster-block-info">
+                     <p>Wordmaster guessed: <strong>{roundTransitionData.wordmasterGuess.guess}</strong></p>
+                     <p>{roundTransitionData.wordmasterGuess.correct ? '✅ Blocked successfully!' : '❌ Incorrect block attempt'}</p>
+                   </div>
+                )}
               </div>
             )}
           </div>
