@@ -905,7 +905,6 @@ function GamePage({ playerId }) {
 
           <GameLog
             gameLog={game?.gameLog || []}
-            playerNicknames={playerNicknames}
           />
         </aside>
       </div>

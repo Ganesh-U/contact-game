@@ -81,7 +81,6 @@ GameLog.propTypes = {
       message: PropTypes.string.isRequired,
     })
   ).isRequired,
-  playerNicknames: PropTypes.object.isRequired,
 };
 
 export default GameLog;

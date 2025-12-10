@@ -58,7 +58,7 @@ Scoreboard.propTypes = {
       role: PropTypes.string,
     })
   ).isRequired,
-  scores: PropTypes.object.isRequired,
+  scores: PropTypes.objectOf(PropTypes.number).isRequired,
   wordmasterId: PropTypes.string.isRequired,
   currentClueGiverId: PropTypes.string,
 };

@@ -156,7 +156,12 @@ PlayerSlot.propTypes = {
   onRoleSelect: PropTypes.func.isRequired,
   canSelectRole: PropTypes.bool.isRequired,
   slotIndex: PropTypes.number.isRequired,
-  allPlayers: PropTypes.array,
+  allPlayers: PropTypes.arrayOf(
+    PropTypes.shape({
+      playerId: PropTypes.string.isRequired,
+      role: PropTypes.string,
+    })
+  ),
   isAdmin: PropTypes.bool,
   onKickPlayer: PropTypes.func,
   isRoomAdmin: PropTypes.bool,
