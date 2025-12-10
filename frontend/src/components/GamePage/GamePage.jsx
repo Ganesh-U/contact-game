@@ -690,7 +690,7 @@ function GamePage({ playerId }) {
                           onChange={(e) =>
                             setWordmasterGuess(e.target.value.toUpperCase())
                           }
-                          onKeyPress={(e) =>
+                          onKeyDown={(e) =>
                             e.key === 'Enter' && handleWordmasterGuessSubmit()
                           }
                           maxLength={20}
@@ -731,7 +731,7 @@ function GamePage({ playerId }) {
                         onChange={(e) =>
                           setClueWord(e.target.value.toUpperCase())
                         }
-                        onKeyPress={(e) =>
+                        onKeyDown={(e) =>
                           e.key === 'Enter' && handleSubmitClue()
                         }
                         maxLength={20}
@@ -746,7 +746,7 @@ function GamePage({ playerId }) {
                         placeholder="Give a hint for your word"
                         value={clue}
                         onChange={(e) => setClue(e.target.value)}
-                        onKeyPress={(e) =>
+                        onKeyDown={(e) =>
                           e.key === 'Enter' && handleSubmitClue()
                         }
                         maxLength={100}
@@ -789,6 +789,9 @@ function GamePage({ playerId }) {
                             placeholder="Additional hint"
                             value={secondClue}
                             onChange={(e) => setSecondClue(e.target.value)}
+                            onKeyDown={(e) =>
+                              e.key === 'Enter' && handleSubmitSecondClue()
+                            }
                             maxLength={100}
                           />
                           <Button
@@ -845,7 +848,7 @@ function GamePage({ playerId }) {
                           onChange={(e) =>
                             setContactWord(e.target.value.toUpperCase())
                           }
-                          onKeyPress={(e) =>
+                          onKeyDown={(e) =>
                             e.key === 'Enter' &&
                             !hasClickedContact &&
                             handleContactClick()
@@ -901,7 +904,7 @@ function GamePage({ playerId }) {
                     onChange={(e) =>
                       setTargetWordGuess(e.target.value.toUpperCase())
                     }
-                    onKeyPress={(e) =>
+                    onKeyDown={(e) =>
                       e.key === 'Enter' && handleTargetWordGuessSubmit()
                     }
                     maxLength={20}

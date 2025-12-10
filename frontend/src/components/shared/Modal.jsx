@@ -1,20 +1,78 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './Modal.css';
 
 function Modal({ title, children, onClose, size = 'medium' }) {
+  const modalRef = useRef(null);
+  const previousFocusRef = useRef(null);
+
   useEffect(() => {
-    const handleEscape = (e) => {
+    // Store currently focused element to restore later
+    previousFocusRef.current = document.activeElement;
+
+    const modalElement = modalRef.current;
+    if (modalElement) {
+      // If focus is already inside the modal (e.g. via autoFocus), don't override it
+      if (modalElement.contains(document.activeElement)) {
+        return;
+      }
+
+      // Find all focusable elements
+      const focusableElements = modalElement.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      
+      const firstElement = focusableElements[0];
+      if (firstElement) {
+        firstElement.focus();
+      }
+    }
+
+    return () => {
+      // Restore focus
+      if (previousFocusRef.current) {
+        previousFocusRef.current.focus();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const modalElement = modalRef.current;
+    const handleKeyDown = (e) => {
       if (e.key === 'Escape' && onClose) {
         onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        if (!modalElement) return;
+
+        const focusableElements = modalElement.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
   }, [onClose]);
@@ -27,9 +85,9 @@ function Modal({ title, children, onClose, size = 'medium' }) {
 
   return (
     <div className="modal-overlay" onClick={handleBackdropClick}>
-      <div className={`modal-container ${size}`}>
+      <div className={`modal-container ${size}`} ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div className="modal-header">
-          <h2 className="modal-title">{title}</h2>
+          <h2 className="modal-title" id="modal-title">{title}</h2>
           {onClose && (
             <button
               className="modal-close"

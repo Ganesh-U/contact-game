@@ -83,7 +83,6 @@ button {
   font-family: inherit;
   cursor: pointer;
   border: none;
-  outline: none;
   transition: all 0.2s ease;
 }
 
@@ -92,11 +91,16 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Global Focus Style for Accessibility */
+:focus-visible {
+  outline: 3px solid var(--accent-primary) !important;
+  outline-offset: 2px;
+}
+
 input,
 textarea,
 select {
   font-family: inherit;
-  outline: none;
 }
 
 a {

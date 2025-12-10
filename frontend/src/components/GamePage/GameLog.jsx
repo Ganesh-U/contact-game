@@ -42,7 +42,7 @@ function GameLog({ gameLog }) {
   return (
     <div className="game-log">
       <h3 className="game-log-title">Game Log</h3>
-      <div className="game-log-content">
+      <div className="game-log-content" tabIndex="0">
         {gameLog.length === 0 ? (
           <p className="empty-log">No events yet...</p>
         ) : (

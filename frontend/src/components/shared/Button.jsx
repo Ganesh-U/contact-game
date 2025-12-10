@@ -10,6 +10,7 @@ function Button({
   fullWidth = false,
   type = 'button',
   className = '',
+  ...props
 }) {
   return (
     <button
@@ -18,7 +19,7 @@ function Button({
         fullWidth ? 'btn-full-width' : ''
       } ${className}`}
       onClick={onClick}
-      disabled={disabled}
+      {...props}
     >
       {children}
     </button>

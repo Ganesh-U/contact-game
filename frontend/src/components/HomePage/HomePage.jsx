@@ -145,7 +145,7 @@ function HomePage({ playerId, nickname, setNickname }) {
               placeholder="Your nickname"
               value={localNickname}
               onChange={(e) => setLocalNickname(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleCreateRoom()}
+              onKeyDown={(e) => e.key === 'Enter' && handleCreateRoom()}
               maxLength={20}
             />
           </div>
@@ -185,11 +185,12 @@ function HomePage({ playerId, nickname, setNickname }) {
             <input
               type="text"
               id="room-code"
+              autoFocus
               className="input-field"
               placeholder="Enter room code"
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-              onKeyPress={(e) => e.key === 'Enter' && handleJoinRoom()}
+              onKeyDown={(e) => e.key === 'Enter' && handleJoinRoom()}
               maxLength={6}
             />
           </div>

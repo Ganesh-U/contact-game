@@ -532,11 +532,12 @@ function RoomPage({ playerId, nickname, setNickname }) {
               <input
                 type="text"
                 id="nickname-input"
+                autoFocus
                 className="input-field"
                 placeholder="Enter nickname"
                 value={localNickname}
                 onChange={(e) => setLocalNickname(e.target.value)}
-                onKeyPress={(e) =>
+                onKeyDown={(e) =>
                   e.key === 'Enter' && handleJoinWithNickname()
                 }
                 maxLength={20}
@@ -570,11 +571,12 @@ function RoomPage({ playerId, nickname, setNickname }) {
               <input
                 type="text"
                 id="target-word"
+                autoFocus
                 className="input-field"
                 placeholder="Enter secret word"
                 value={targetWord}
                 onChange={(e) => setTargetWord(e.target.value.toUpperCase())}
-                onKeyPress={(e) =>
+                onKeyDown={(e) =>
                   e.key === 'Enter' && handleSubmitTargetWord()
                 }
                 maxLength={20}
