@@ -1,8 +1,8 @@
 .game-log {
   background-color: var(--bg-secondary);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 1.4rem;
-  box-shadow: 0 2px 8px var(--shadow);
+  box-shadow: 0 4px 12px var(--shadow);
   display: flex;
   flex-direction: column;
   max-height: 550px;
@@ -55,9 +55,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  padding: 0.9rem;
+  padding: 1rem;
   background-color: var(--bg-tertiary);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   border-left: 3px solid var(--border-color);
   font-size: 0.95rem;
   animation: logEntrySlide 0.3s ease;
@@ -77,17 +77,17 @@
 
 .log-entry.success {
   border-left-color: var(--success);
-  background-color: rgba(16, 185, 129, 0.1);
+  background-color: var(--log-success-bg);
 }
 
 .log-entry.error {
   border-left-color: var(--error);
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: var(--log-error-bg);
 }
 
 .log-entry.info {
   border-left-color: var(--accent-primary);
-  background-color: rgba(233, 69, 96, 0.1);
+  background-color: var(--log-info-bg);
 }
 
 .log-time {

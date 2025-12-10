@@ -20,9 +20,9 @@
 
 .game-layout {
   display: grid;
-  grid-template-columns: 300px 1fr 500px;
+  grid-template-columns: 300px 1fr minmax(350px, 25%);
   grid-template-rows: 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
   width: 100%;
   flex: 1;
   padding: 1rem;
@@ -75,11 +75,13 @@
 
 .game-header {
   background-color: var(--bg-secondary);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: 0 2px 8px var(--shadow);
+  box-shadow: 0 4px 12px var(--shadow);
   position: relative;
   flex-shrink: 0;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
 }
 
 .target-word-display {
@@ -142,11 +144,12 @@
 
 .game-content {
   background-color: var(--bg-secondary);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px var(--shadow);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: 0 4px 12px var(--shadow);
   flex-shrink: 0;
   min-height: fit-content;
+  border: 1px solid var(--border-color);
 }
 
 .wordmaster-panel,

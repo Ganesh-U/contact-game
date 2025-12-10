@@ -8,16 +8,30 @@
   --bg-primary: #1a1a2e;
   --bg-secondary: #16213e;
   --bg-tertiary: #0f3460;
+  --bg-surface-elevated: #1f4287; /* New: Elevated surface color */
+  
   --text-primary: #eaeaea;
   --text-secondary: #a8b2d1;
+  
   --accent-primary: #e94560;
   --accent-secondary: #533483;
   --accent-hover: #c23050;
+  
   --border-color: #2d4059;
+  
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
+  
+  /* Log specific colors */
+  --log-info-bg: rgba(83, 52, 131, 0.3);
+  --log-success-bg: rgba(16, 185, 129, 0.2);
+  --log-error-bg: rgba(239, 68, 68, 0.2);
+  
   --shadow: rgba(0, 0, 0, 0.3);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
 }
 
 body.light-theme {
