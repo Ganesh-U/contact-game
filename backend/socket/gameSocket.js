@@ -304,6 +304,13 @@ export function initializeGameSocket(server, sessionMiddleware) {
           );
           const round = game.rounds.find((r) => r.roundNumber === roundNumber);
 
+          if (round.wordmasterGuessesRemaining <= 0) {
+            socket.emit('error', {
+              message: 'No guesses remaining',
+            });
+            return;
+          }
+
           const correct = checkClueWordGuess(guess, round.clueWord);
 
           const updatedGame = await Game.addWordmasterGuess(

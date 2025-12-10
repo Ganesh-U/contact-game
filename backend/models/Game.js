@@ -208,7 +208,11 @@ export class Game {
   static async addWordmasterGuess(gameId, roundNumber, guess, correct) {
     const db = getDB();
     const result = await db.collection(COLLECTION_NAME).findOneAndUpdate(
-      { gameId, 'rounds.roundNumber': roundNumber },
+      {
+        gameId,
+        'rounds.roundNumber': roundNumber,
+        'rounds.wordmasterGuessesRemaining': { $gt: 0 },
+      },
       {
         $push: {
           'rounds.$.wordmasterGuesses': {

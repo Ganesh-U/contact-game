@@ -654,7 +654,11 @@ function GamePage({ playerId }) {
                         <input
                           type="text"
                           className="input-field"
-                          placeholder="Enter your guess"
+                          placeholder={
+                            currentRound.wordmasterGuessesRemaining <= 0
+                              ? 'No guesses remaining'
+                              : 'Enter your guess'
+                          }
                           value={wordmasterGuess}
                           onChange={(e) =>
                             setWordmasterGuess(e.target.value.toUpperCase())
@@ -663,6 +667,7 @@ function GamePage({ playerId }) {
                             e.key === 'Enter' && handleWordmasterGuessSubmit()
                           }
                           maxLength={20}
+                          disabled={currentRound.wordmasterGuessesRemaining <= 0}
                         />
                         <Button
                           variant="primary"
