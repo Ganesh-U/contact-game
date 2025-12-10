@@ -25,6 +25,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
   const [wordmasterChoosing, setWordmasterChoosing] = useState(false);
   const [choosingWordmasterName, setChoosingWordmasterName] = useState('');
   const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState('lobby'); // 'lobby', 'settings', 'info'
 
   useEffect(() => {
     // Only load room if we have a playerId
@@ -353,7 +354,29 @@ function RoomPage({ playerId, nickname, setNickname }) {
   return (
     <div className="room-page">
       <div className="room-layout">
-        <aside className="left-sidebar">
+        {/* Mobile Nav for Room */}
+        <div className="mobile-nav-tabs">
+          <button 
+            className={`mobile-nav-btn ${activeTab === 'lobby' ? 'active' : ''}`}
+            onClick={() => setActiveTab('lobby')}
+          >
+            Lobby
+          </button>
+          <button 
+            className={`mobile-nav-btn ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            Settings
+          </button>
+          <button 
+            className={`mobile-nav-btn ${activeTab === 'info' ? 'active' : ''}`}
+            onClick={() => setActiveTab('info')}
+          >
+            Info/Exit
+          </button>
+        </div>
+
+        <aside className={`left-sidebar ${activeTab === 'settings' ? 'mobile-visible' : ''}`}>
           <div className="room-settings">
             <h3>Room Settings</h3>
 
@@ -409,7 +432,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
           </div>
         </aside>
 
-        <main className="room-main">
+        <main className={`room-main ${activeTab === 'lobby' ? 'mobile-visible' : ''}`}>
           <div className="room-header">
             <h2>Game Lobby</h2>
             <p className="player-count">
@@ -440,7 +463,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
           </div>
         </main>
 
-        <aside className="right-sidebar">
+        <aside className={`right-sidebar ${activeTab === 'info' ? 'mobile-visible' : ''}`}>
           <div className="room-info">
             <h3>Room ID</h3>
             <div className="room-code-container">

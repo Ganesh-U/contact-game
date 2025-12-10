@@ -56,7 +56,7 @@
 }
 
 .btn-danger:not(:disabled):hover {
-  background-color: #dc2626;
+  background-color: var(--error-hover);
 }
 
 .btn-success {
@@ -65,7 +65,7 @@
 }
 
 .btn-success:not(:disabled):hover {
-  background-color: #059669;
+  background-color: var(--success-hover);
 }
 
 .btn-small {

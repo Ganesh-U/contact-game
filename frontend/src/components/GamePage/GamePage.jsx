@@ -43,6 +43,8 @@ function GamePage({ playerId }) {
   const [showVictoryTransition, setShowVictoryTransition] = useState(false);
   const [victoryData, setVictoryData] = useState(null);
 
+  const [activeTab, setActiveTab] = useState('game'); // 'game', 'scoreboard', 'log'
+
   const roomRef = useRef(null);
 
   useEffect(() => {
@@ -554,7 +556,28 @@ function GamePage({ playerId }) {
   return (
     <div className="game-page">
       <div className="game-layout">
-        <aside className="left-sidebar">
+        <div className="mobile-nav-tabs">
+          <button 
+            className={`mobile-nav-btn ${activeTab === 'game' ? 'active' : ''}`}
+            onClick={() => setActiveTab('game')}
+          >
+            Game
+          </button>
+          <button 
+            className={`mobile-nav-btn ${activeTab === 'scoreboard' ? 'active' : ''}`}
+            onClick={() => setActiveTab('scoreboard')}
+          >
+            Scoreboard
+          </button>
+          <button 
+            className={`mobile-nav-btn ${activeTab === 'log' ? 'active' : ''}`}
+            onClick={() => setActiveTab('log')}
+          >
+            Game Log
+          </button>
+        </div>
+
+        <aside className={`left-sidebar ${activeTab === 'scoreboard' ? 'mobile-visible' : ''}`}>
           <div className="room-settings-display">
             <h3>Settings</h3>
             <p>Round Time: {room?.settings.roundTime} min</p>
@@ -569,7 +592,11 @@ function GamePage({ playerId }) {
           />
         </aside>
 
+        <div className={`game-center-column ${activeTab === 'game' ? 'mobile-visible' : ''}`}>
+
         <main className="game-main">
+          {/* Mobile Tab Navigation - Moved to top level */}
+
           <div className="game-header">
             <div className="target-word-display">
               {isWordmaster ? (
@@ -896,8 +923,9 @@ function GamePage({ playerId }) {
             )}
           </div>
         </main>
+        </div>
 
-        <aside className="right-sidebar">
+        <aside className={`right-sidebar ${activeTab === 'log' ? 'mobile-visible' : ''}`}>
           <div className="room-info-sidebar">
             <h3>Room Info</h3>
             <p>
@@ -915,14 +943,13 @@ function GamePage({ playerId }) {
       </div>
 
       {showVictoryTransition && victoryData && (
-        <div className="victory-transition-overlay">
-          <div className="victory-content">
+        <Modal
+          title={victoryData.isYou ? 'YOU WON!' : `${victoryData.winnerNickname} WINS!`}
+          size="medium"
+          onClose={() => setShowVictoryTransition(false)}
+        >
+          <div className="victory-content-inner">
             <div className="victory-icon">🎉</div>
-            <h1 className="victory-title">
-              {victoryData.isYou
-                ? 'YOU WON!'
-                : `${victoryData.winnerNickname} WINS!`}
-            </h1>
             <div className="victory-details">
               <p className="secret-word-reveal">
                 Secret word was: <strong>{victoryData.secretWord}</strong>
@@ -935,14 +962,16 @@ function GamePage({ playerId }) {
               <p className="victory-message">Congratulations! 🎊</p>
             )}
           </div>
-        </div>
+        </Modal>
       )}
 
       {showRoundTransition && roundTransitionData && (
-        <div className="round-transition-overlay">
-          <div className="transition-content">
-            <h2>Round Ended!</h2>
-
+        <Modal
+          title="Round Ended!"
+          size="medium"
+          onClose={closeRoundTransition}
+        >
+          <div className="transition-content-inner">
             <div className="transition-timer">
               <p>Next round starts in: <strong>{transitionCountdown}s</strong></p>
               <Button 
@@ -1012,7 +1041,7 @@ function GamePage({ playerId }) {
               </div>
             )}
           </div>
-        </div>
+        </Modal>
       )}
 
       {showGameOverModal && (

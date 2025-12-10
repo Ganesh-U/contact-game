@@ -217,9 +217,17 @@ body {
 }
 
 @media (max-width: 1200px) {
+  .home-page {
+    height: auto;
+    min-height: calc(100dvh - 90px);
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+
   .home-container {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding-bottom: 3rem;
   }
 
   .title {

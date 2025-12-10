@@ -21,11 +21,11 @@
 }
 
 .player-slot.wordmaster {
-  background: linear-gradient(135deg, var(--bg-tertiary), #4a2c5e);
+  background: linear-gradient(135deg, var(--bg-tertiary), var(--wordmaster-gradient-end));
 }
 
 .player-slot.guesser {
-  background: linear-gradient(135deg, var(--bg-tertiary), #2c4e5e);
+  background: linear-gradient(135deg, var(--bg-tertiary), var(--guesser-gradient-end));
 }
 
 .slot-content {
@@ -72,7 +72,7 @@
 }
 
 .admin-badge.host {
-  background-color: #f59e0b; /* Amber-500 */
+  background-color: var(--warning);
   color: #1a1a1a;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
@@ -118,7 +118,7 @@
 }
 
 .wordmaster-btn:hover {
-  background-color: #6d3fa3;
+  background-color: #6d3fa3; /* This seems unique enough to keep or we could add a var, but leaving for now as per plan focus */
   transform: translateY(-1px);
 }
 
@@ -166,7 +166,7 @@
 }
 
 .kick-player-btn:hover {
-  background-color: #dc2626;
+  background-color: var(--error-hover);
 }
 
 .role-hint-text {
@@ -232,7 +232,7 @@
 }
 
 .kick-confirm-yes:hover {
-  background-color: #dc2626;
+  background-color: var(--error-hover);
 }
 
 .kick-confirm-no {
@@ -256,18 +256,18 @@
 }
 
 .status-badge.ready {
-  background-color: var(--success, #10b981);
+  background-color: var(--success);
   color: white;
 }
 
 .status-badge.connecting {
-  background-color: var(--warning, #eab308);
+  background-color: var(--warning);
   color: #1a1a1a;
   animation: pulse 2s infinite;
 }
 
 .status-badge.disconnected {
-  background-color: var(--error, #ef4444);
+  background-color: var(--error);
   color: white;
 }
 

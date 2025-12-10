@@ -93,7 +93,7 @@
 .log-time {
   font-size: 0.8rem;
   color: var(--text-secondary);
-  font-family: monospace;
+  font-family: var(--font-code);
 }
 
 .log-message {
@@ -101,3 +101,11 @@
   line-height: 1.5;
   font-size: 0.95rem;
 }
+
+@media (max-width: 1200px) {
+  .game-log {
+    min-height: 250px;
+    max-height: 400px;
+  }
+}
+

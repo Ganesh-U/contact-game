@@ -55,7 +55,7 @@
 .timer-display {
   font-size: 1.5rem;
   font-weight: 700;
-  font-family: monospace;
+  font-family: var(--font-code);
   color: var(--text-primary);
   min-width: 60px;
   text-align: center;
