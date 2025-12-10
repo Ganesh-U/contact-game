@@ -499,7 +499,8 @@ function RoomPage({ playerId, nickname, setNickname }) {
                 disabled={
                   !wordmaster ||
                   guessers.length < 2 ||
-                  room?.status === 'in-game'
+                  room?.status === 'in-game' ||
+                  !room?.players.every(p => p.isReady)
                 }
                 fullWidth
               >

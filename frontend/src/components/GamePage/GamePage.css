@@ -208,7 +208,7 @@
 }
 
 .clue-text.secondary {
-  color: var(--accent-secondary);
+  color: var(--text-accent-secondary);
   font-size: 1.1rem;
 }
 
@@ -721,7 +721,7 @@
 }
 
 .wordmaster-block-info strong {
-  color: var(--accent-secondary);
+  color: var(--text-accent-secondary);
 }
 
 /* Contact Results */
@@ -732,4 +732,19 @@
 
 .guess-reveal.correct-contact strong {
   color: var(--success);
+}
+
+.points-system-display {
+  margin-top: 1rem;
+}
+
+.points-system-display ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.points-system-display li {
+  margin-bottom: 0.4rem;
 }

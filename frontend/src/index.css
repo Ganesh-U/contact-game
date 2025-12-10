@@ -17,6 +17,7 @@
   
   --accent-primary: #C23050; /* Darkened for accessibility (was #e94560) */
   --accent-secondary: #7e57c2; /* Lightened for accessibility (was #533483) */
+  --text-accent-secondary: #d1c4e9; /* Lighter purple for accessible text on dark bg */
   --accent-hover: #9E2440; /* Darkened for accessibility (was #c23050) */
   
   --border-color: #2d4059;

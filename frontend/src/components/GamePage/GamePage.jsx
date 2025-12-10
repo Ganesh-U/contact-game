@@ -597,6 +597,16 @@ function GamePage({ playerId }) {
             currentClueGiverId={currentRound?.clueGiverId}
             currentUserId={playerId}
           />
+
+          <div className="room-settings-display points-system-display">
+            <h3 style={{ color: 'var(--text-primary)' }}>Points System</h3>
+            <ul>
+              <li>Secret Word guess: 100 pts</li>
+              <li>Successful contact: 20 pts (giver), 15 pts (guesser)</li>
+              <li>WM correct block: 10 pts</li>
+              <li>First to guess bonus: 25 pts</li>
+            </ul>
+          </div>
         </aside>
 
         <div 
@@ -889,6 +899,7 @@ function GamePage({ playerId }) {
                               variant="danger"
                               size="small"
                               onClick={handleRemoveContact}
+                              disabled={!submittedContact}
                             >
                               Remove
                             </Button>
