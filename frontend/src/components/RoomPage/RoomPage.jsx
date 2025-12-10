@@ -376,13 +376,19 @@ function RoomPage({ playerId, nickname, setNickname }) {
           </button>
         </div>
 
-        <aside className={`left-sidebar ${activeTab === 'settings' ? 'mobile-visible' : ''}`}>
+        <aside 
+          className={`left-sidebar ${activeTab === 'settings' ? 'mobile-visible' : ''}`}
+          tabIndex={0}
+          role="region"
+          aria-label="Room Settings and Scoreboard"
+        >
           <div className="room-settings">
-            <h3>Room Settings</h3>
+            <h2>Room Settings</h2>
 
             <div className="setting-item">
-              <label>Round Time</label>
+              <label htmlFor="round-time">Round Time</label>
               <select
+                id="round-time"
                 value={room?.settings.roundTime || 2}
                 onChange={(e) =>
                   handleSettingsChange('roundTime', e.target.value)
@@ -398,8 +404,9 @@ function RoomPage({ playerId, nickname, setNickname }) {
             </div>
 
             <div className="setting-item">
-              <label>Wordmaster Guesses</label>
+              <label htmlFor="wordmaster-guesses">Wordmaster Guesses</label>
               <select
+                id="wordmaster-guesses"
                 value={room?.settings.wordmasterGuesses || 3}
                 onChange={(e) =>
                   handleSettingsChange('wordmasterGuesses', e.target.value)
@@ -414,7 +421,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
           </div>
 
           <div className="scoreboard-preview">
-            <h3>Scoreboard</h3>
+            <h2>Scoreboard</h2>
             <div className="player-list">
               {room?.players.map((player) => (
                 <div key={player.playerId} className="score-item">
@@ -432,9 +439,14 @@ function RoomPage({ playerId, nickname, setNickname }) {
           </div>
         </aside>
 
-        <main className={`room-main ${activeTab === 'lobby' ? 'mobile-visible' : ''}`}>
+        <main 
+          className={`room-main ${activeTab === 'lobby' ? 'mobile-visible' : ''}`}
+          tabIndex={0}
+          role="region"
+          aria-label="Lobby Player Grid"
+        >
           <div className="room-header">
-            <h2>Game Lobby</h2>
+            <h1>Game Lobby</h1>
             <p className="player-count">
               Players: {room?.players.length || 0}/6
             </p>
@@ -463,9 +475,14 @@ function RoomPage({ playerId, nickname, setNickname }) {
           </div>
         </main>
 
-        <aside className={`right-sidebar ${activeTab === 'info' ? 'mobile-visible' : ''}`}>
+        <aside 
+          className={`right-sidebar ${activeTab === 'info' ? 'mobile-visible' : ''}`}
+          tabIndex={0}
+          role="region"
+          aria-label="Room Info and Actions"
+        >
           <div className="room-info">
-            <h3>Room ID</h3>
+            <h2>Room ID</h2>
             <div className="room-code-container">
               <code className="room-code">{roomId}</code>
               <button className="copy-button" onClick={copyRoomCode}>
@@ -500,7 +517,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
           </div>
 
           <div className="game-log-preview">
-            <h3>Game Log</h3>
+            <h2>Game Log</h2>
             <div className="log-content">
               <p className="log-entry">Waiting for game to start...</p>
             </div>

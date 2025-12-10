@@ -11,28 +11,30 @@
   --bg-surface-elevated: #1f4287; /* New: Elevated surface color */
   
   --text-primary: #eaeaea;
+  --text-primary: #eaeaea;
   --text-secondary: #a8b2d1;
+  --text-accent: #ff8fa3; /* Lighter pink for text-on-dark contrast (>4.5:1) */
   
-  --accent-primary: #e94560;
-  --accent-secondary: #533483;
-  --accent-hover: #c23050;
+  --accent-primary: #C23050; /* Darkened for accessibility (was #e94560) */
+  --accent-secondary: #7e57c2; /* Lightened for accessibility (was #533483) */
+  --accent-hover: #9E2440; /* Darkened for accessibility (was #c23050) */
   
   --border-color: #2d4059;
   
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  --success: #15803d; /* Darkened further for AAA/AA compliance (was #059669) */
+  --warning: #b45309; /* Darkened further (was #d97706) */
+  --error: #b91c1c; /* Darkened further for compliance (was #dc2626) */
   
   /* New: Hover states & Gradients */
-  --error-hover: #dc2626;
-  --success-hover: #059669;
+  --error-hover: #991b1b;
+  --success-hover: #166534;
 
   --accent-gradient-end: #c7375f;
   --wordmaster-gradient-end: #4a2c5e;
   --guesser-gradient-end: #2c4e5e;
 
   /* Log specific colors */
-  --log-info-bg: rgba(83, 52, 131, 0.3);
+  --log-info-bg: rgba(126, 87, 194, 0.3); /* Updated to match new accent-secondary */
   --log-success-bg: rgba(16, 185, 129, 0.2);
   --log-error-bg: rgba(239, 68, 68, 0.2);
   
@@ -141,4 +143,16 @@ h4 {
 
 p {
   line-height: 1.7;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

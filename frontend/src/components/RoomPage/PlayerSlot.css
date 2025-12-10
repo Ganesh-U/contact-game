@@ -12,7 +12,8 @@
 
 .player-slot.empty {
   border-style: dashed;
-  opacity: 0.6;
+  background-color: rgba(15, 52, 96, 0.5); /* bg-tertiary with opacity */
+  border-color: rgba(45, 64, 89, 0.5); /* border-color with opacity */
 }
 
 .player-slot.current-player {
@@ -123,7 +124,7 @@
 }
 
 .guesser-btn {
-  background-color: var(--accent-primary);
+  background-color: var(--accent-hover);
   color: white;
 }
 
@@ -257,7 +258,7 @@
 
 .status-badge.ready {
   background-color: var(--success);
-  color: white;
+  color: var(--bg-primary);
 }
 
 .status-badge.connecting {

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import './Scoreboard.css';
 
-function Scoreboard({ players, scores, wordmasterId, currentClueGiverId }) {
+function Scoreboard({ players, scores, wordmasterId, currentClueGiverId, currentUserId }) {
   // Sort by score descending
   const sortedPlayers = [...players].sort((a, b) => {
     const scoreA = scores[a.playerId] || 0;
@@ -16,6 +16,7 @@ function Scoreboard({ players, scores, wordmasterId, currentClueGiverId }) {
         {sortedPlayers.map((player, index) => {
           const isWordmaster = player.playerId === wordmasterId;
           const isClueGiver = player.playerId === currentClueGiverId;
+          const isCurrentUser = player.playerId === currentUserId;
           const score = scores[player.playerId] || 0;
 
           return (
@@ -27,7 +28,10 @@ function Scoreboard({ players, scores, wordmasterId, currentClueGiverId }) {
             >
               <span className="player-rank">#{index + 1}</span>
               <div className="player-info">
-                <span className="player-nickname">{player.nickname}</span>
+                <span className="player-nickname">
+                  {player.nickname}
+                  {isCurrentUser && <span className="current-user-tag"> (you)</span>}
+                </span>
                 <div className="player-roles">
                   {isWordmaster && (
                     <span className="role-label wordmaster-label">
@@ -61,6 +65,7 @@ Scoreboard.propTypes = {
   scores: PropTypes.objectOf(PropTypes.number).isRequired,
   wordmasterId: PropTypes.string.isRequired,
   currentClueGiverId: PropTypes.string,
+  currentUserId: PropTypes.string,
 };
 
 export default Scoreboard;

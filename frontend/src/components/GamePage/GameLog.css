@@ -14,7 +14,7 @@
 .game-log-title {
   font-size: 1.15rem;
   margin-bottom: 1rem;
-  color: var(--accent-primary);
+  color: var(--text-primary); /* Changed to white for accessibility */
   font-weight: 600;
   flex-shrink: 0;
 }

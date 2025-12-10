@@ -73,8 +73,13 @@ function HomePage({ playerId, nickname, setNickname }) {
           <p className="subtitle">Multiplayer Word Guessing Game</p>
         </section>
 
-        <section className="rules-section">
-          <h3>How to Play</h3>
+        <section
+          className="rules-section"
+          tabIndex={0}
+          role="region"
+          aria-label="Game Rules"
+        >
+          <h2>How to Play</h2>
           <div className="rules-content">
             <h3>Game Overview</h3>
             <p>

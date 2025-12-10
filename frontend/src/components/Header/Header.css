@@ -1,7 +1,7 @@
 .header {
   width: 100%;
   background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-gradient-end) 100%);
-  box-shadow: 0 2px 12px rgba(233, 69, 96, 0.3);
+  box-shadow: 0 2px 12px var(--accent-primary);
   flex-shrink: 0;
   transition:
     background 0.3s ease,

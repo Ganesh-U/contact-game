@@ -556,6 +556,7 @@ function GamePage({ playerId }) {
   return (
     <div className="game-page">
       <div className="game-layout">
+        <h1 className="visually-hidden">Contact Game Room</h1>
         <div className="mobile-nav-tabs">
           <button 
             className={`mobile-nav-btn ${activeTab === 'game' ? 'active' : ''}`}
@@ -577,9 +578,14 @@ function GamePage({ playerId }) {
           </button>
         </div>
 
-        <aside className={`left-sidebar ${activeTab === 'scoreboard' ? 'mobile-visible' : ''}`}>
+        <aside 
+          className={`left-sidebar ${activeTab === 'scoreboard' ? 'mobile-visible' : ''}`}
+          tabIndex={0}
+          role="region"
+          aria-label="Scoreboard and Settings"
+        >
           <div className="room-settings-display">
-            <h3>Settings</h3>
+            <h3 style={{ color: 'var(--text-primary)' }}>Settings</h3>
             <p>Round Time: {room?.settings.roundTime} min</p>
             <p>WM Guesses: {room?.settings.wordmasterGuesses}</p>
           </div>
@@ -589,10 +595,16 @@ function GamePage({ playerId }) {
             scores={game?.scores || {}}
             wordmasterId={game?.wordmasterId}
             currentClueGiverId={currentRound?.clueGiverId}
+            currentUserId={playerId}
           />
         </aside>
 
-        <div className={`game-center-column ${activeTab === 'game' ? 'mobile-visible' : ''}`}>
+        <div 
+          className={`game-center-column ${activeTab === 'game' ? 'mobile-visible' : ''}`}
+          tabIndex={0}
+          role="region"
+          aria-label="Game Board"
+        >
 
         <main className="game-main">
           {/* Mobile Tab Navigation - Moved to top level */}

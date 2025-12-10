@@ -118,7 +118,7 @@
 .target-word {
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--accent-primary);
+  color: var(--text-accent); /* Lighter accent for better visibility */
   letter-spacing: 6px;
   margin-bottom: 0.5rem;
 }
@@ -141,7 +141,7 @@
 .revealed-letters {
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--accent-primary);
+  color: var(--text-accent);
   letter-spacing: 6px;
   margin-bottom: 0.5rem;
   display: flex;
@@ -150,7 +150,7 @@
 }
 
 .letter {
-  color: var(--accent-primary);
+  color: var(--text-accent);
 }
 
 .dash {
@@ -320,7 +320,7 @@
 .rank {
   font-weight: 700;
   font-size: 1.2rem;
-  color: var(--accent-primary);
+  color: var(--text-accent);
   min-width: 40px;
 }
 
@@ -332,7 +332,7 @@
 .score {
   font-weight: 700;
   font-size: 1.1rem;
-  color: var(--accent-primary);
+  color: var(--text-accent);
 }
 
 .winner-badge {
@@ -363,7 +363,7 @@
 .room-info-sidebar h3 {
   font-size: 1rem;
   margin-bottom: 0.8rem;
-  color: var(--accent-primary);
+  color: var(--text-primary); /* Changed from accent-primary for accessibility */
   font-weight: 600;
 }
 
@@ -393,7 +393,7 @@
 }
 
 .transition-timer strong {
-  color: var(--accent-primary);
+  color: var(--text-accent);
   font-size: 1.4rem;
   font-weight: 800;
 }
@@ -419,7 +419,7 @@
 }
 
 .clue-word-reveal strong {
-  color: var(--accent-primary);
+  color: var(--text-accent);
   font-size: 1.6rem;
   font-weight: 800;
 }
@@ -562,9 +562,9 @@
   }
 
   .mobile-nav-btn.active {
-    color: var(--accent-primary);
+    color: var(--text-primary);
     border-bottom-color: var(--accent-primary);
-    background-color: var(--bg-tertiary);
+    /* background-color: var(--bg-tertiary); Removed for better contrast */
   }
 
   /* Visibility Control */
