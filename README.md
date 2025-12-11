@@ -155,71 +155,74 @@ cd backend && npm run format     # Format backend
 
 ```
 contact-game/
-├── backend/                      # Backend server
+├── backend/                       # Backend server
 │   ├── config/
-│   │   └── db.js                 # MongoDB connection
+│   │   └── db.js                  # MongoDB connection
 │   ├── models/
-│   │   ├── Room.js               # Room CRUD operations
-│   │   └── Game.js               # Game CRUD operations
+│   │   ├── Room.js                # Room CRUD operations
+│   │   └── Game.js                # Game CRUD operations
 │   ├── routes/
-│   │   ├── rooms.js              # Room REST API
-│   │   └── games.js              # Game REST API
+│   │   ├── rooms.js               # Room REST API
+│   │   └── games.js               # Game REST API
 │   ├── socket/
-│   │   └── gameSocket.js         # Socket.io event handlers
+│   │   └── gameSocket.js          # Socket.io event handlers
 │   ├── utils/
-│   │   └── gameLogic.js          # Game mechanics utilities
+│   │   └── gameLogic.js           # Game mechanics utilities
 │   ├── scripts/
-│   │   ├── words.json            # Words JSON
-│   │   └── seed.js               # Database seeding script
-│   ├── server.js                 # Express server setup
-│   ├── eslint.config.js          # ESLint configuration
-│   ├── .prettierrc               # Prettier configuration
-│   └── package.json              # Backend dependencies
-├── frontend/                     # React frontend
+│   │   ├── words.json             # Words JSON
+│   │   └── seed.js                # Database seeding script
+│   ├── server.js                  # Express server setup
+│   ├── eslint.config.js           # ESLint configuration
+│   ├── .prettierrc                # Prettier configuration
+│   └── package.json               # Backend dependencies
+├── frontend/                      # React frontend
 │   ├── public/
-│   │   ├── index.html            # HTML template
-│   │   └── manifest.json         # PWA manifest
+│   │   ├── index.html             # HTML template
+│   │   └── manifest.json          # PWA manifest
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── HomePage/
-│   │   │   │   ├── HomePage.js   # Landing page
+│   │   │   │   ├── HomePage.jsx   # Landing page
 │   │   │   │   └── HomePage.css
 │   │   │   ├── RoomPage/
-│   │   │   │   ├── RoomPage.js   # Pre-game lobby
+│   │   │   │   ├── RoomPage.jsx   # Pre-game lobby
 │   │   │   │   ├── RoomPage.css
-│   │   │   │   ├── PlayerSlot.js # Player slot component
+│   │   │   │   ├── PlayerSlot.jsx # Player slot component
 │   │   │   │   └── PlayerSlot.css
 │   │   │   ├── GamePage/
-│   │   │   │   ├── GamePage.js   # Main gameplay
+│   │   │   │   ├── GamePage.jsx   # Main gameplay
 │   │   │   │   ├── GamePage.css
-│   │   │   │   ├── Scoreboard.js # Score tracking
-│   │   │   │   ├── GameLog.js    # Event log
-│   │   │   │   └── Timer.js      # Round timer
+│   │   │   │   ├── Scoreboard.jsx # Score tracking
+│   │   │   │   ├── Scoreboard.css
+│   │   │   │   ├── GameLog.jsx    # Event log
+│   │   │   │   ├── GameLog.css
+│   │   │   │   ├── Timer.jsx      # Round timer
+│   │   │   │   └── Timer.css
 │   │   │   ├── Header/
-│   │   │   │   ├── Header.js     # Navigation header
+│   │   │   │   ├── Header.jsx     # Navigation header
 │   │   │   │   └── Header.css
 │   │   │   ├── Footer/
-│   │   │   │   ├── Footer.js     # Page footer
+│   │   │   │   ├── Footer.jsx     # Page footer
 │   │   │   │   └── Footer.css
 │   │   │   └── shared/
-│   │   │       ├── Button.js     # Reusable button
+│   │   │       ├── Button.jsx     # Reusable button
 │   │   │       ├── Button.css
-│   │   │       ├── Modal.js      # Modal overlay
+│   │   │       ├── Modal.jsx      # Modal overlay
 │   │   │       └── Modal.css
 │   │   ├── hooks/
-│   │   │   └── useSocket.js      # Socket.io custom hook
+│   │   │   └── useSocket.js       # Socket.io custom hook
 │   │   ├── utils/
-│   │   │   └── api.js            # REST API client
-│   │   ├── App.js                # Main app component
-│   │   ├── App.css               # Global app styles
-│   │   ├── index.js              # React entry point
-│   │   └── index.css             # Global CSS variables
-│   ├── eslint.config.js          # ESLint configuration
-│   ├── .prettierrc               # Prettier configuration
-│   └── package.json              # Frontend dependencies
-├── package.json                  # Root build scripts
-├── .gitignore                    # Git ignore rules
-└── README.md                     # This file
+│   │   │   └── api.js             # REST API client
+│   │   ├── App.jsx                # Main app component
+│   │   ├── App.css                # Global app styles
+│   │   ├── index.js               # React entry point
+│   │   └── index.css              # Global CSS variables
+│   ├── eslint.config.js           # ESLint configuration
+│   ├── .prettierrc                # Prettier configuration
+│   └── package.json               # Frontend dependencies
+├── package.json                   # Root build scripts
+├── .gitignore                     # Git ignore rules
+└── README.md                      # This file
 ```
 
 ## Game Rules
@@ -294,6 +297,27 @@ Contact is a cooperative word-guessing game where Guessers work together to reve
 - Victory detection and game completion
 - Session persistence across page reloads
 - Player disconnect handling with 5-second grace period
+
+## Design System
+
+### Typography
+
+The project uses Google Fonts for consistent typography:
+
+- **Headings:** Outfit (400, 700) - Modern geometric sans-serif
+- **Body Text:** Inter (400, 600) - Clean, UI-optimized sans-serif
+- **Code:** JetBrains Mono (400, 700) - Monospace for technical elements
+
+### Color Palette
+
+The application uses a consistent Dark Mode theme with CSS variables defined in `src/index.css`:
+
+- **Backgrounds:** Deep blue palette (`#1a1a2e`, `#16213e`, `#0f3460`)
+- **Accents:** Crimson red (`#A81F3D`) and purple (`#7e57c2`)
+- **Text:** Off-white (`#eaeaea`) with muted blue-grey (`#a8b2d1`)
+- **Status:** Green (success), orange (warning), red (error)
+
+All colors use CSS custom properties for easy maintenance and consistent application across components.
 
 ## Future Enhancements
 
