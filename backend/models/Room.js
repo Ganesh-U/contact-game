@@ -106,16 +106,14 @@ export class Room {
     return result;
   }
 
-  static async resetAllPlayersReady(roomId) {
+  static async setAllPlayersReady(roomId, isReady) {
     const db = getDB();
-    // Set all players' isReady to false
-    // We need to use updateOne/updateMany with array filters or just set the field for all elements if possible
-    // MongoDB $[] operator updates all elements in array
+    // Set all players' isReady to the provided value
     const result = await db.collection(COLLECTION_NAME).findOneAndUpdate(
       { roomId },
       {
         $set: {
-          'players.$[].isReady': false,
+          'players.$[].isReady': isReady,
           updatedAt: new Date(),
         },
       },
@@ -188,7 +186,10 @@ export class Room {
 
   static async updateStatus(roomId, status) {
     if (status === 'starting') {
-      await this.resetAllPlayersReady(roomId);
+      await this.setAllPlayersReady(roomId, false);
+    } else if (status === 'waiting') {
+      // If we're going back to waiting (e.g. cancel setup), make everyone ready again
+      await this.setAllPlayersReady(roomId, true);
     }
     return await this.updateRoom(roomId, { status });
   }

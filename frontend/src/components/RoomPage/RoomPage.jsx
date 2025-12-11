@@ -319,6 +319,19 @@ function RoomPage({ playerId, nickname, setNickname }) {
     }
   };
 
+  const handleCancelGameSetup = async () => {
+    try {
+      // Reset room status to waiting so everyone goes back to lobby
+      await api.updateRoomStatus(roomId, 'waiting');
+      setShowTargetWordModal(false);
+    } catch (err) {
+      console.error('Failed to cancel game setup:', err);
+      setError('Failed to cancel game setup');
+      // Close modal locally anyway to unblock user
+      setShowTargetWordModal(false);
+    }
+  };
+
   const copyRoomCode = () => {
     navigator.clipboard.writeText(roomId);
     setCopied(true);
@@ -577,7 +590,7 @@ function RoomPage({ playerId, nickname, setNickname }) {
       {showTargetWordModal && (
         <Modal
           title="Choose Secret Word"
-          onClose={() => setShowTargetWordModal(false)}
+          onClose={handleCancelGameSetup}
         >
           <div className="modal-content">
             <p className="modal-description">
@@ -624,6 +637,16 @@ function RoomPage({ playerId, nickname, setNickname }) {
             >
               START GAME
             </Button>
+            
+            <div style={{ marginTop: '1rem' }}>
+              <Button
+                variant="secondary"
+                onClick={handleCancelGameSetup}
+                fullWidth
+              >
+                Cancel Game
+              </Button>
+            </div>
           </div>
         </Modal>
       )}
