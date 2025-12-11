@@ -507,6 +507,9 @@ function GamePage({ playerId }) {
           body: JSON.stringify({ status: 'waiting' }),
         }
       );
+      //Use the api utility
+      //import { api } from '../../utils/api';
+      //await api.updateRoomStatus(roomId, 'waiting');
 
       // Navigate back to room
       navigate(`/room/${roomId}`);
