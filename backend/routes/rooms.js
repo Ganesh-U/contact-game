@@ -96,6 +96,7 @@ router.post('/:roomId/players', async (req, res) => {
 router.delete('/:roomId/players/:playerId', async (req, res) => {
   try {
     const { roomId, playerId } = req.params;
+    const { requesterId } = req.query;
 
     // Get room first to get player nickname for notification
     const room = await Room.findByRoomId(roomId);
@@ -104,6 +105,12 @@ router.delete('/:roomId/players/:playerId', async (req, res) => {
     }
     
     const playerToRemove = room.players.find(p => p.playerId === playerId);
+
+    // Determine if this is a kick or a leave
+    // It's a kick if the requester is the admin and is NOT the one being removed
+    const isKick = requesterId && 
+                  room.adminId === requesterId && 
+                  requesterId !== playerId;
 
     const updatedRoom = await Room.removePlayer(roomId, playerId);
 
@@ -127,10 +134,17 @@ router.delete('/:roomId/players/:playerId', async (req, res) => {
     io.to(roomId).emit('room_updated', updatedRoom);
     
     if (playerToRemove) {
-        io.to(roomId).emit('player_left', { 
-            playerId, 
-            nickname: playerToRemove.nickname 
-        });
+        if (isKick) {
+            io.to(roomId).emit('player_kicked', { 
+                playerId, 
+                nickname: playerToRemove.nickname 
+            });
+        } else {
+            io.to(roomId).emit('player_left', { 
+                playerId, 
+                nickname: playerToRemove.nickname 
+            });
+        }
     }
 
     res.json(updatedRoom);

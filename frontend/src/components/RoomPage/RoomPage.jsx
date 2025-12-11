@@ -310,7 +310,8 @@ function RoomPage({ playerId, nickname, setNickname }) {
 
   const handleKickPlayer = (playerIdToKick) => {
     try {
-      api.removePlayer(roomId, playerIdToKick).catch(err => {
+      // Pass current playerId as requesterId (admin)
+      api.removePlayer(roomId, playerIdToKick, playerId).catch(err => {
           console.error('Error kicking player:', err);
           setError('Failed to kick player');
       });

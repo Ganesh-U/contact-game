@@ -45,8 +45,8 @@ export const api = {
       body: JSON.stringify({ playerId, nickname }),
     }),
 
-  removePlayer: (roomId, playerId) =>
-    request(`/api/rooms/${roomId}/players/${playerId}`, {
+  removePlayer: (roomId, playerId, requesterId) =>
+    request(`/api/rooms/${roomId}/players/${playerId}?requesterId=${requesterId || ''}`, {
       method: 'DELETE',
     }),
 

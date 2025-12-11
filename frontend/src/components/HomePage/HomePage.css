@@ -87,27 +87,21 @@ body {
   font-weight: 300;
 }
 
+
 .rules-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  max-height: 60vh;
+  padding-right: 0.5rem; /* Add some padding for scrollbar */
+}
+
+.rules-block {
   background-color: var(--bg-secondary);
   border-radius: 12px;
   padding: 2.5rem;
   box-shadow: 0 4px 16px var(--shadow);
-  overflow-y: auto;
-  max-height: 60vh;
-}
-
-.rules-section::-webkit-scrollbar {
-  width: 8px;
-}
-
-.rules-section::-webkit-scrollbar-track {
-  background: var(--bg-tertiary);
-  border-radius: 4px;
-}
-
-.rules-section::-webkit-scrollbar-thumb {
-  background: var(--accent-primary);
-  border-radius: 4px;
 }
 
 .rules-section h3 {
@@ -133,6 +127,16 @@ body {
 
 .rules-content h3:first-child {
   margin-top: 0;
+}
+
+
+
+.rules-content h4 {
+  color: var(--text-primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.15rem;
+  font-weight: 600;
 }
 
 .rules-content ul,

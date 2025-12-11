@@ -80,63 +80,71 @@ function HomePage({ playerId, nickname, setNickname }) {
           aria-label="Game Rules"
         >
           <h2>How to Play</h2>
-          <div className="rules-content">
+          
+          <div className="rules-block">
             <h3>Game Overview</h3>
-            <p>
-              Contact is a cooperative word-guessing game where guessers work
-              together to reveal a secret word chosen by the Wordmaster.
-            </p>
+            <div className="rules-content">
+              <p>
+                Contact is a cooperative word-guessing game where guessers work
+                together to reveal a secret word chosen by the Wordmaster.
+              </p>
+            </div>
+          </div>
 
-            <h3>Setup</h3>
-            <ul>
-              <li>3-6 players (1 Wordmaster + 2-5 Guessers)</li>
-              <li>Wordmaster chooses a secret word (minimum 5 letters)</li>
-              <li>First letter is revealed to Guessers</li>
-            </ul>
+          <div className="rules-block">
+            <h3>Rules & Gameplay</h3>
+            <div className="rules-content">
+              <h4>Setup</h4>
+              <ul>
+                <li>3-6 players (1 Wordmaster + 2-5 Guessers)</li>
+                <li>Wordmaster chooses a secret word (minimum 5 letters)</li>
+                <li>First letter is revealed to Guessers</li>
+              </ul>
 
-            <h3>Gameplay</h3>
-            <ol>
-              <li>
-                <strong>Clue-giver&apos;s Turn:</strong> Each round, one guesser
-                becomes the clue-giver and thinks of a word starting with the
-                revealed letters, then provides a clue.
-              </li>
-              <li>
-                <strong>Making Contact:</strong> Other guessers who think they
-                know the clue word enter their guess and click
-                &quot;Contact!&quot;
-              </li>
-              <li>
-                <strong>Wordmaster Blocks:</strong> The Wordmaster has limited
-                time and guesses to block by guessing the clue word correctly.
-              </li>
-              <li>
-                <strong>Successful Contact:</strong> If the Wordmaster fails to
-                block and at least one guesser matches the clue word, the next
-                letter of the secret word is revealed!
-              </li>
-              <li>
-                <strong>Secret Word Guess:</strong> After each letter reveal,
-                guessers can attempt to guess the full secret word (once per
-                letter).
-              </li>
-              <li>
-                <strong>Winning:</strong> First guesser to correctly guess the
-                complete secret word wins!
-              </li>
-            </ol>
+              <h4>Gameplay Flow</h4>
+              <ol>
+                <li>
+                  <strong>Clue-giver&apos;s Turn:</strong> Each round, one guesser
+                  becomes the clue-giver and thinks of a word starting with the
+                  revealed letters, then provides a clue.
+                </li>
+                <li>
+                  <strong>Making Contact:</strong> Other guessers who think they
+                  know the clue word enter their guess and click
+                  &quot;Contact!&quot;
+                </li>
+                <li>
+                  <strong>Wordmaster Blocks:</strong> The Wordmaster has limited
+                  time and guesses to block by guessing the clue word correctly.
+                </li>
+                <li>
+                  <strong>Successful Contact:</strong> If the Wordmaster fails to
+                  block and at least one guesser matches the clue word, the next
+                  letter of the secret word is revealed!
+                </li>
+                <li>
+                  <strong>Secret Word Guess:</strong> After each letter reveal,
+                  guessers can attempt to guess the full secret word (once per
+                  letter).
+                </li>
+                <li>
+                  <strong>Winning:</strong> First guesser to correctly guess the
+                  complete secret word wins!
+                </li>
+              </ol>
 
-            <h3>Points System</h3>
-            <ul>
-              <li>
-                Secret Word guess: 100 points
-              </li>
-              <li>
-                Successful contact: 20 points to clue-giver, 15 points to matching guessers
-              </li>
-              <li>Wordmaster correct block: 10 points</li>
-              <li>First to guess bonus: 25 points</li>
-            </ul>
+              <h4>Points System</h4>
+              <ul>
+                <li>
+                  Secret Word guess: 100 points
+                </li>
+                <li>
+                  Successful contact: 20 points to clue-giver, 15 points to matching guessers
+                </li>
+                <li>Wordmaster correct block: 10 points</li>
+                <li>First to guess bonus: 25 points</li>
+              </ul>
+            </div>
           </div>
         </section>
 
