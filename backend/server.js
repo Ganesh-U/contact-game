@@ -61,7 +61,7 @@ app.get('*', (req, res) => {
 });
 
 // Error handler
-app.use((err, req, res, _next) => {
+app.use((err, req, res) => { // _next parameter defined but never used
   res.status(500).json({
     error: 'Internal server error',
     message: err.message,
